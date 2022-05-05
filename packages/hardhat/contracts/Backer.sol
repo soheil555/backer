@@ -19,9 +19,9 @@ contract Backer is ReEntrancyGuard  {
     struct SubscriptionPlan {
 
         uint256 id;
+        string name;
         address creator;
         uint256 amountPerPeriod;
-        string message;
 
     }
 
@@ -35,7 +35,7 @@ contract Backer is ReEntrancyGuard  {
 
     /***** STATES *****/
 
-    uint256 subPlanId;
+    uint256 nextSubscriptionPlanId;
     uint256 period;
     uint256 contractStartTime;
 
@@ -50,8 +50,7 @@ contract Backer is ReEntrancyGuard  {
     mapping (address => uint256) creatorAfterLastClaimsPeriod;
 
 
-    mapping (address => uint256) public balances;
-    mapping (address => uint256) creatorBalances;
+    mapping (address => uint256) balances;
 
 
     constructor(uint256 _period) {
@@ -64,7 +63,7 @@ contract Backer is ReEntrancyGuard  {
 
     /***** HELPER FUNCTIONS *****/
 
-    function currentPeriod() internal view returns (uint) {
+    function currentPeriod() internal view returns (uint256) {
 
         return (block.timestamp - contractStartTime) / period;
 
@@ -91,6 +90,11 @@ contract Backer is ReEntrancyGuard  {
 
     }
 
+    function getBalance(address user) external view returns (uint256) {
+
+        return balances[user];
+
+    }
 
     function withdraw(uint256 amount) external noReentrant {
 
@@ -112,12 +116,35 @@ contract Backer is ReEntrancyGuard  {
 
     }
 
+
+    /***** SUBSCRIPTION *****/
+
+    function newSubscriptionPlan(uint256 amountPerPeriod, string memory name) external {
+
+        nextSubscriptionPlanId += 1;
+
+        SubscriptionPlan memory subscriptionPlan = SubscriptionPlan({
+            id:nextSubscriptionPlanId,
+            creator: msg.sender,
+            amountPerPeriod: amountPerPeriod,
+            name: name
+        });
+
+        creatorSubscriptionPlans[msg.sender].push(subscriptionPlan);
+
+    }
+
+    function getCreatorSubscriptionPlans(address creator) external view returns ( SubscriptionPlan[] memory) {
+
+        return creatorSubscriptionPlans[creator];
+
+    }
+
     function canSubscribe(uint256 amountPerPeriod, uint256 numOfPeriods) public view returns (bool) {
 
         return (balances[msg.sender] >= amountPerPeriod*numOfPeriods);
 
     }
-
 
     function subscribe(address creator,uint256 subscriptionPlanId,uint256 numOfPeriods) external {
 
@@ -134,13 +161,11 @@ contract Backer is ReEntrancyGuard  {
 
         require(planFound,"creator has no subscription plan with this id");
         require(canSubscribe(subscriptionPlan.amountPerPeriod, numOfPeriods),"not enough fund to subscribe");
+    
+        require(!supporterSubscriptions[msg.sender][creator].initialized || supporterSubscriptions[msg.sender][creator].afterLastPeriod <= currentPeriod(),"already have a plan");
 
-        require(!supporterSubscriptions[msg.sender][creator].initialized);
-
-        for(uint256 periodNum = currentPeriod(); periodNum < numOfPeriods; periodNum++) {
-
+        for(uint256 periodNum = currentPeriod(); periodNum < currentPeriod()+numOfPeriods; periodNum++) {
             creatorPayments[creator][periodNum] += subscriptionPlan.amountPerPeriod;
-
         }
 
         Subscription memory subscription = Subscription({
@@ -155,14 +180,15 @@ contract Backer is ReEntrancyGuard  {
 
     }
 
-
     function cancelSubscribe(address creator) external {
 
         Subscription memory subscription = supporterSubscriptions[msg.sender][creator];
         require(subscription.initialized);
 
-        balances[msg.sender] += subscription.subscriptionPlan.amountPerPeriod * (subscription.afterLastPeriod - currentPeriod());
-        for(uint256 periodNum = currentPeriod(); periodNum < subscription.afterLastPeriod; periodNum++){
+        //you can not get back current period money
+        balances[msg.sender] += subscription.subscriptionPlan.amountPerPeriod * (subscription.afterLastPeriod - currentPeriod() - 1);
+
+        for(uint256 periodNum = currentPeriod()+1 ; periodNum < subscription.afterLastPeriod; periodNum++){
             creatorPayments[creator][periodNum] -= subscription.subscriptionPlan.amountPerPeriod;
         }
 
@@ -170,11 +196,5 @@ contract Backer is ReEntrancyGuard  {
         emit SubscribeCancelled(period, msg.sender, creator, subscription.subscriptionPlan.id);
 
     }
-
-
-
-
-    
-
 
 }

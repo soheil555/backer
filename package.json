@@ -1,22 +1,23 @@
 {
-    "name": "backer",
-    "version": "1.0.0",
-    "private": true,
-    "scripts": {
-        "dev": "yarn workspace backer-frontend dev",
-        "build": "yarn workspace backer-frontend build",
-        "start": "yarn workspace backer-frontend start",
-        "chain": "yarn workspace backer-hardhat chain",
-        "deploy": "yarn workspace backer-hardhat deploy",
-        "compile": "yarn workspace backer-hardhat compile"
-    },
-    "workspaces": {
-        "packages": [
-            "packages/*"
-        ],
-        "nohoist": [
-            "**/hardhat",
-            "**/hardhat/**"
-        ]
-    }
+  "name": "backer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "yarn workspace backer-frontend dev",
+    "build": "yarn workspace backer-frontend build",
+    "start": "yarn workspace backer-frontend start",
+    "chain": "yarn workspace backer-hardhat chain",
+    "deploy": "yarn workspace backer-hardhat deploy",
+    "compile": "yarn workspace backer-hardhat compile",
+    "hardhat-test": "yarn workspace backer-hardhat test"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/hardhat",
+      "**/hardhat/**"
+    ]
+  }
 }

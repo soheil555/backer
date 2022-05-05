@@ -30,6 +30,7 @@ packages/hardhat/*.txt
 packages/hardhat/cache
 packages/hardhat/artifacts
 packages/hardhat/deployments
+packages/hardhat/typechain
 
 ## Frontend Files ##
 # testing
@@ -41,3 +42,6 @@ packages/frontend/out/
 packages/frontend/build
 # contracts
 # packages/frontend/artifacts/*
+
+# vscode
+.vscode

@@ -1,9 +1,11 @@
 {
   "name": "backer-hardhat",
+  "version": "1.0.0",
   "scripts": {
     "chain": "npx hardhat node",
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run scripts/deploy.ts --network localhost"
+    "deploy": "npx hardhat run scripts/deploy.ts --network localhost",
+    "test": "npx hardhat test"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
