@@ -95,6 +95,17 @@ describe("Backer", function () {
       backer.connect(supporter).subscribe(creator.address, 1, 10)
     ).to.be.revertedWith("already have a plan");
 
+    let subscribers = await backer.getCreatorSubscribers(creator.address);
+    expect(subscribers).to.length(1);
+    expect(subscribers[0].supporter).to.eq(supporter.address);
+    expect(subscribers[0].subscriptionPlanId).to.eq(1);
+
+    let subscriptions = await backer.getSupporterSubscriptions(
+      supporter.address
+    );
+    expect(subscriptions).to.length(1);
+    expect(subscriptions[0].subscriptionPlan.id).to.eq(1);
+
     await ethers.provider.send("evm_increaseTime", [2 * period]);
     await ethers.provider.send("evm_mine", []);
 
@@ -118,8 +129,16 @@ describe("Backer", function () {
       ethers.utils.parseEther("80")
     );
 
+    subscribers = await backer.getCreatorSubscribers(creator.address);
+
     tx = await backer.connect(supporter).cancelSubscribe(creator.address);
     await tx.wait();
+
+    subscribers = await backer.getCreatorSubscribers(creator.address);
+    expect(subscribers).to.length(0);
+
+    subscriptions = await backer.getSupporterSubscriptions(supporter.address);
+    expect(subscriptions).to.length(0);
 
     expect(await backer.getBalance(supporter.address)).to.eq(
       ethers.utils.parseEther("89")
