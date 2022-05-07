@@ -27,18 +27,15 @@ const Home: NextPage = () => {
         network.
       </Text>
 
-      <Button
+      <Web3Button
         mt={10}
         letterSpacing="wider"
         variant="outline"
         colorScheme="purple"
         size="lg"
         _hover={{ bg: "purple.500", color: "white" }}
-      >
-        Login to be a creator/supporter
-      </Button>
-
-      <Web3Button />
+        disconnectedMessage="Connect Wallet to be a creator/supporter"
+      />
     </Container>
   );
 };

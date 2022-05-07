@@ -34,7 +34,7 @@ export const web3Slice = createSlice({
       state.chainId = action.payload.chainId;
     },
     resetWeb3Provider: (state: Draft<State>) => {
-      state = initialState;
+      return initialState;
     },
   },
 });

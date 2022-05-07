@@ -9,7 +9,7 @@ import {
   setAddress,
   setWeb3Provider,
 } from "../redux/slices/web3Slice";
-import { Button } from "@chakra-ui/react";
+import { Button, ButtonProps, forwardRef, chakra } from "@chakra-ui/react";
 
 let web3Modal: Web3Modal;
 if (typeof window !== "undefined") {
@@ -21,103 +21,116 @@ if (typeof window !== "undefined") {
   UAuthWeb3Modal.registerWeb3Modal(web3Modal);
 }
 
-export default function Web3Button() {
-  const { provider, web3Provider } = useAppSelector((state) => state.web3);
+type Web3ButtonProps = ButtonProps & {
+  connectedMessage?: string;
+  disconnectedMessage?: string;
+};
 
-  const dispatch = useAppDispatch();
+const Web3Button = forwardRef<Web3ButtonProps, "button">(
+  ({ connectedMessage, disconnectedMessage, ...restProps }, ref) => {
+    const { provider, web3Provider } = useAppSelector((state) => state.web3);
 
-  const uauth = useMemo(() => {
-    console.log("New UAuth instance");
-    const { package: uauthPackage, options: uauthOptions } =
-      providerOptions["custom-uauth"];
+    const dispatch = useAppDispatch();
 
-    return UAuthWeb3Modal.getUAuth(uauthPackage, uauthOptions);
-  }, []);
+    const uauth = useMemo(() => {
+      console.log("New UAuth instance");
+      const { package: uauthPackage, options: uauthOptions } =
+        providerOptions["custom-uauth"];
 
-  const connect = useCallback(async function () {
-    let provider;
-    try {
-      provider = await web3Modal.connect();
-    } catch (err) {
-      console.log("connection failed");
-      return;
-    }
+      return UAuthWeb3Modal.getUAuth(uauthPackage, uauthOptions);
+    }, []);
 
-    let user: any;
-    if (web3Modal.cachedProvider === "custom-uauth") {
-      user = await uauth.user();
-    }
+    const connect = useCallback(async function () {
+      let provider;
+      try {
+        provider = await web3Modal.connect();
+      } catch (err) {
+        console.log("connection failed");
+        return;
+      }
 
-    const web3Provider = new ethers.providers.Web3Provider(provider);
+      let user: any;
+      if (web3Modal.cachedProvider === "custom-uauth") {
+        user = await uauth.user();
+      }
 
-    const signer = web3Provider.getSigner();
-    const address = await signer.getAddress();
-    const network = await web3Provider.getNetwork();
+      const web3Provider = new ethers.providers.Web3Provider(provider);
 
-    dispatch(
-      setWeb3Provider({
-        provider,
-        web3Provider,
-        address,
-        chainId: network.chainId,
-        user,
-      })
+      const signer = web3Provider.getSigner();
+      const address = await signer.getAddress();
+      const network = await web3Provider.getNetwork();
+
+      dispatch(
+        setWeb3Provider({
+          provider,
+          web3Provider,
+          address,
+          chainId: network.chainId,
+          user,
+        })
+      );
+    }, []);
+
+    const disconnect = useCallback(async function () {
+      await web3Modal.clearCachedProvider();
+      if (provider?.disconnect && typeof provider.disconnect === "function") {
+        await provider.disconnect();
+      }
+
+      dispatch(resetWeb3Provider());
+    }, []);
+
+    useEffect(() => {
+      if (web3Modal.cachedProvider) {
+        connect();
+      }
+    }, [connect]);
+
+    useEffect(() => {
+      if (provider?.on) {
+        const handleAccountsChanged = (accounts: string[]) => {
+          console.log("accounts changed", accounts);
+          dispatch(
+            setAddress({
+              address: accounts[0],
+            })
+          );
+        };
+
+        const handleChainChanged = (_hexChainId: string) => {
+          window.location.reload();
+        };
+
+        const handleDisconnect = (error: { code: number; message: string }) => {
+          console.log("disconnect", error);
+          disconnect();
+        };
+
+        provider.on("accountsChanged", handleAccountsChanged);
+        provider.on("chainChanged", handleChainChanged);
+        provider.on("disconnect", handleDisconnect);
+
+        // Subscription Cleanup
+        return () => {
+          if (provider.removeListener) {
+            provider.removeListener("accountsChanged", handleAccountsChanged);
+            provider.removeListener("chainChanged", handleChainChanged);
+            provider.removeListener("disconnect", handleDisconnect);
+          }
+        };
+      }
+    }, [provider, disconnect]);
+
+    return web3Provider ? (
+      <Button ref={ref} onClick={disconnect} {...restProps}>
+        {connectedMessage || "Disconnect"}
+      </Button>
+    ) : (
+      <Button ref={ref} onClick={connect} {...restProps}>
+        {disconnectedMessage || "Connect Wallet"}
+      </Button>
     );
-  }, []);
+  }
+);
 
-  const disconnect = useCallback(async function () {
-    await web3Modal.clearCachedProvider();
-    if (provider?.disconnect && typeof provider.disconnect === "function") {
-      await provider.disconnect();
-    }
-
-    dispatch(resetWeb3Provider());
-  }, []);
-
-  useEffect(() => {
-    if (web3Modal.cachedProvider) {
-      connect();
-    }
-  }, [connect]);
-
-  useEffect(() => {
-    if (provider?.on) {
-      const handleAccountsChanged = (accounts: string[]) => {
-        console.log("accounts changed", accounts);
-        dispatch(
-          setAddress({
-            address: accounts[0],
-          })
-        );
-      };
-
-      const handleChainChanged = (_hexChainId: string) => {
-        window.location.reload();
-      };
-
-      const handleDisconnect = (error: { code: number; message: string }) => {
-        console.log("disconnect", error);
-        disconnect();
-      };
-
-      provider.on("accountsChanged", handleAccountsChanged);
-      provider.on("chainChanged", handleChainChanged);
-      provider.on("disconnect", handleDisconnect);
-
-      // Subscription Cleanup
-      return () => {
-        if (provider.removeListener) {
-          provider.removeListener("accountsChanged", handleAccountsChanged);
-          provider.removeListener("chainChanged", handleChainChanged);
-          provider.removeListener("disconnect", handleDisconnect);
-        }
-      };
-    }
-  }, [provider, disconnect]);
-
-  return web3Provider ? (
-    <Button onClick={disconnect}>Disconnect</Button>
-  ) : (
-    <Button onClick={connect}>Connect Wallet</Button>
-  );
-}
+export default Web3Button;
