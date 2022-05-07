@@ -1,5 +1,10 @@
 import type { NextPage } from "next";
 import { Container, Heading, Text, Box, Button } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
+
+const Web3Button = dynamic(() => import("../components/web3-button"), {
+  ssr: false,
+});
 
 const Home: NextPage = () => {
   return (
@@ -32,6 +37,8 @@ const Home: NextPage = () => {
       >
         Login to be a creator/supporter
       </Button>
+
+      <Web3Button />
     </Container>
   );
 };
