@@ -19,7 +19,7 @@ export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box w="100%">
+    <Box w="100%" h="5rem">
       <Container
         maxW="container.lg"
         display="flex"

@@ -19,7 +19,7 @@ export const dashboardRoutes: Route[] = [
     component: Dashboard,
   },
   {
-    path: "/profile",
+    path: "/dashboard/profile",
     name: "Profile",
     icon: MdPerson,
     component: Profile,

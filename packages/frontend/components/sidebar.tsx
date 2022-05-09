@@ -46,7 +46,14 @@ const createLinks = (routes: Route[]) => {
 
 export default function Sidebar({ routes }: SidebarProps) {
   return (
-    <Box bg="purple.50" w="320px" h="90vh" pt={20} m={3} borderRadius="md">
+    <Box
+      bg="purple.50"
+      w="320px"
+      h="calc(100vh - 5rem)"
+      pt={20}
+      mx={3}
+      borderRadius="md"
+    >
       <VStack spacing={10} align="stretch" mx={2}>
         {createLinks(routes)}
       </VStack>
