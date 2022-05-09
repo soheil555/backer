@@ -49,10 +49,11 @@ export default function Sidebar({ routes }: SidebarProps) {
     <Box
       bg="purple.50"
       w="320px"
-      h="calc(100vh - 5rem)"
+      h="calc(100vh - 10rem)"
       pt={20}
       mx={3}
       borderRadius="md"
+      position="fixed"
     >
       <VStack spacing={10} align="stretch" mx={2}>
         {createLinks(routes)}
