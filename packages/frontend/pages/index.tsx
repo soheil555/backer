@@ -1,12 +1,24 @@
 import type { NextPage } from "next";
-import { Container, Heading, Text, Box, Button } from "@chakra-ui/react";
+import { Container, Heading, Text, Box } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
+import { useAppSelector } from "../redux/hooks";
+import { useRouter } from "next/router";
 
 const Web3Button = dynamic(() => import("../components/web3-button"), {
   ssr: false,
 });
 
 const Home: NextPage = () => {
+  const router = useRouter();
+
+  const { web3Provider } = useAppSelector((state) => state.web3);
+  useEffect(() => {
+    if (web3Provider) {
+      router.push("/dashboard");
+    }
+  }, [web3Provider]);
+
   return (
     <Container
       maxW="container.lg"

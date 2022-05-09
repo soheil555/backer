@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useEffect } from "react";
-import Web3Modal from "web3modal";
+import * as Web3Modal from "web3modal";
 import { providerOptions } from "../config/provider-options";
 import { ethers } from "ethers";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -11,9 +11,9 @@ import {
 } from "../redux/slices/web3Slice";
 import { Button, ButtonProps, forwardRef, chakra } from "@chakra-ui/react";
 
-let web3Modal: Web3Modal;
+let web3Modal: Web3Modal.default;
 if (typeof window !== "undefined") {
-  web3Modal = new Web3Modal({
+  web3Modal = new Web3Modal.default({
     cacheProvider: true,
     providerOptions,
   });
