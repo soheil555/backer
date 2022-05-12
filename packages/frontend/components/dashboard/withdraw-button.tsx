@@ -20,30 +20,33 @@ import {
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { useState } from "react";
+import useAccountBalance from "../../hooks/useAccountBalance";
 import useAppSelector from "../../hooks/useAppSelector";
 import useBackerContract from "../../hooks/useBackerContract";
+import { parseBalance } from "../../utils";
 
-const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
+const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
   const toast = useToast();
   const { web3Provider, address } = useAppSelector((state) => state.web3);
   const backer = useBackerContract();
+  const { data: accountBalance } = useAccountBalance(address);
 
   const [value, setValue] = useState<number>(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const buttonDisabled = !(!!web3Provider || !!backer);
 
-  const handleDeposit = async () => {
+  const handleWithdraw = async () => {
     try {
       const signer = web3Provider!.getSigner(address);
 
       await backer!
         .connect(signer)
-        .deposit({ value: ethers.utils.parseEther(String(value)) });
+        .withdraw(ethers.utils.parseEther(String(value)));
 
       toast({
-        title: "Deposit",
-        description: "Depost Transaction sent, Please wait for confirmation",
+        title: "Withdraw",
+        description: "Withdraw Transaction sent, Please wait for confirmation",
         status: "success",
         isClosable: true,
         duration: 5000,
@@ -54,8 +57,8 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
     } catch (error) {
       console.error(error);
       toast({
-        title: "Deposit",
-        description: "Depost Failed",
+        title: "Withdraw",
+        description: "Withdraw Failed",
         status: "error",
         isClosable: true,
         duration: 5000,
@@ -66,16 +69,16 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
   return (
     <Box>
       <Button isDisabled={buttonDisabled} {...props} onClick={onOpen} ref={ref}>
-        Deposit
+        Withdraw
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Deposit Matic</ModalHeader>
+          <ModalHeader>Withdraw Matic</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            deposit Matic to start supporting your favorite creator
+            withdraw Matic from your account
             <NumberInput
               onChange={(newValue) => {
                 setValue(Number(newValue));
@@ -86,6 +89,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
               precision={2}
               step={0.5}
               min={0}
+              max={Number(parseBalance(accountBalance ?? 0, 18, 5))}
             >
               <NumberInputField />
               <NumberInputStepper>
@@ -105,11 +109,11 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
               Cancel
             </Button>
             <Button
-              onClick={handleDeposit}
+              onClick={handleWithdraw}
               isDisabled={value == 0}
               colorScheme="purple"
             >
-              Deposit
+              Withdraw
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -118,4 +122,4 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
   );
 });
 
-export default DepositButton;
+export default WithdrawButton;
