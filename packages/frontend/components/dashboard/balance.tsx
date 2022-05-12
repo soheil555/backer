@@ -1,16 +1,13 @@
-import {
-  Box,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Flex,
-  Icon,
-  IconButton,
-} from "@chakra-ui/react";
+import { Box, Stat, StatLabel, StatNumber, Flex, Icon } from "@chakra-ui/react";
 import { MdAccountBalanceWallet } from "react-icons/md";
-import { RepeatIcon } from "@chakra-ui/icons";
+import useAccountBalance from "../../hooks/useAccountBalance";
+import useAppSelector from "../../hooks/useAppSelector";
+import { parseBalance } from "../../utils";
 
 export default function Balance() {
+  const { address } = useAppSelector((state) => state.web3);
+  const { data } = useAccountBalance(address);
+
   return (
     <Flex
       justify="space-between"
@@ -23,12 +20,7 @@ export default function Balance() {
       <Box>
         <Stat alignItems="center">
           <StatLabel>Account Balance</StatLabel>
-          <StatNumber>$12.00</StatNumber>
-          <IconButton
-            size="sm"
-            icon={<RepeatIcon />}
-            aria-label="refresh account balance"
-          ></IconButton>
+          <StatNumber>{parseBalance(data ?? 0)}</StatNumber>
         </Stat>
       </Box>
       <Icon as={MdAccountBalanceWallet} fontSize="5xl" />
