@@ -4,5 +4,5 @@ import type { Backer } from "../contracts/backer/Backer";
 import { backer } from "../config/contract";
 
 export default function useBackerContract() {
-  return useContract<Backer>(backer.localhost.address, Backer_ABI);
+  return useContract<Backer>(backer.localhost.address, Backer_ABI.abi);
 }
