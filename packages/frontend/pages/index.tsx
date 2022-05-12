@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { Container, Heading, Text, Box } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import { useAppSelector } from "../redux/hooks";
+import useAppSelector from "../hooks/useAppSelector";
 import { useRouter } from "next/router";
 import Navbar from "../components/navbar";
 

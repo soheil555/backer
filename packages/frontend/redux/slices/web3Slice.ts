@@ -1,8 +1,8 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
-
+import type { providers } from "ethers";
 interface State {
   provider?: any;
-  web3Provider?: any;
+  web3Provider?: providers.Web3Provider;
   address?: string;
   chainId?: number;
   user?: any;

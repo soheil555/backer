@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 import Sidebar from "../sidebar";
 import { dashboardRoutes } from "../../routes";
 import Navbar from "../dashboard/navbar";
