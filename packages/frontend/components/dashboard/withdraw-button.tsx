@@ -17,6 +17,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   useToast,
+  Center,
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { useState } from "react";
@@ -79,24 +80,35 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
           <ModalCloseButton />
           <ModalBody>
             withdraw Matic from your account
-            <NumberInput
-              onChange={(newValue) => {
-                setValue(Number(newValue));
-              }}
-              value={value}
-              mt={2}
-              defaultValue={0}
-              precision={2}
-              step={0.5}
-              min={0}
-              max={Number(parseBalance(accountBalance ?? 0, 18, 5))}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
+            <Box display="flex">
+              <Button
+                mt={2}
+                mr={2}
+                onClick={() => {
+                  setValue(Number(parseBalance(accountBalance ?? 0, 18, 5)));
+                }}
+              >
+                Max
+              </Button>
+              <NumberInput
+                onChange={(newValue) => {
+                  setValue(Number(newValue));
+                }}
+                value={value}
+                mt={2}
+                defaultValue={0}
+                precision={2}
+                step={0.5}
+                min={0}
+                max={Number(parseBalance(accountBalance ?? 0, 18, 5))}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Box>
           </ModalBody>
 
           <ModalFooter>
