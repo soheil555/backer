@@ -33,6 +33,7 @@ interface BackerInterface extends ethers.utils.Interface {
     "getCreatorSubscriptionPlans(address)": FunctionFragment;
     "getSupporterSubscriptions(address)": FunctionFragment;
     "newSubscriptionPlan(uint256,string)": FunctionFragment;
+    "period()": FunctionFragment;
     "sendTip(address,uint256)": FunctionFragment;
     "subscribe(address,uint256,uint256)": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
@@ -76,6 +77,7 @@ interface BackerInterface extends ethers.utils.Interface {
     functionFragment: "newSubscriptionPlan",
     values: [BigNumberish, string]
   ): string;
+  encodeFunctionData(functionFragment: "period", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "sendTip",
     values: [string, BigNumberish]
@@ -127,6 +129,7 @@ interface BackerInterface extends ethers.utils.Interface {
     functionFragment: "newSubscriptionPlan",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "period", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sendTip", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "subscribe", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
@@ -308,6 +311,8 @@ export class Backer extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    period(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     sendTip(
       creator: string,
       amount: BigNumberish,
@@ -406,6 +411,8 @@ export class Backer extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  period(overrides?: CallOverrides): Promise<BigNumber>;
+
   sendTip(
     creator: string,
     amount: BigNumberish,
@@ -496,6 +503,8 @@ export class Backer extends BaseContract {
       name: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    period(overrides?: CallOverrides): Promise<BigNumber>;
 
     sendTip(
       creator: string,
@@ -662,6 +671,8 @@ export class Backer extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    period(overrides?: CallOverrides): Promise<BigNumber>;
+
     sendTip(
       creator: string,
       amount: BigNumberish,
@@ -730,6 +741,8 @@ export class Backer extends BaseContract {
       name: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    period(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     sendTip(
       creator: string,

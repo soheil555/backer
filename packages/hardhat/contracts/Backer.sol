@@ -47,7 +47,7 @@ contract Backer is ReEntrancyGuard {
     /***** STATES *****/
 
     uint256 nextSubscriptionPlanId;
-    uint256 period;
+    uint256 public period;
     uint256 contractStartTime;
 
     // creater => SubscriptionPlans
