@@ -18,11 +18,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import type {
-  TypedEventFilter,
-  TypedEvent,
-  TypedListener,
-} from "../../../hardhat/typechain/common";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface BackerInterface extends ethers.utils.Interface {
   functions: {
@@ -37,6 +33,7 @@ interface BackerInterface extends ethers.utils.Interface {
     "getCreatorSubscriptionPlans(address)": FunctionFragment;
     "getSupporterSubscriptions(address)": FunctionFragment;
     "newSubscriptionPlan(uint256,string)": FunctionFragment;
+    "sendTip(address,uint256)": FunctionFragment;
     "subscribe(address,uint256,uint256)": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
   };
@@ -78,6 +75,10 @@ interface BackerInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "newSubscriptionPlan",
     values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "sendTip",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "subscribe",
@@ -126,6 +127,7 @@ interface BackerInterface extends ethers.utils.Interface {
     functionFragment: "newSubscriptionPlan",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "sendTip", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "subscribe", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
@@ -306,6 +308,12 @@ export class Backer extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    sendTip(
+      creator: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     subscribe(
       creator: string,
       subscriptionPlanId: BigNumberish,
@@ -398,6 +406,12 @@ export class Backer extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  sendTip(
+    creator: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   subscribe(
     creator: string,
     subscriptionPlanId: BigNumberish,
@@ -480,6 +494,12 @@ export class Backer extends BaseContract {
     newSubscriptionPlan(
       amountPerPeriod: BigNumberish,
       name: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    sendTip(
+      creator: string,
+      amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -642,6 +662,12 @@ export class Backer extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    sendTip(
+      creator: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     subscribe(
       creator: string,
       subscriptionPlanId: BigNumberish,
@@ -702,6 +728,12 @@ export class Backer extends BaseContract {
     newSubscriptionPlan(
       amountPerPeriod: BigNumberish,
       name: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    sendTip(
+      creator: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

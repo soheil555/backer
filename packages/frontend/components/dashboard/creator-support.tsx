@@ -1,4 +1,5 @@
-import { Box } from "@chakra-ui/react";
+import { Box, SimpleGrid } from "@chakra-ui/react";
+import SendTip from "./send-tip";
 
 interface Props {
   address: string;
@@ -7,5 +8,11 @@ interface Props {
 export default function CreatorSupport({ address }: Props) {
   if (address.length === 0) return null;
 
-  return <Box>{address}</Box>;
+  return (
+    <SimpleGrid mt={10} minChildWidth="400px" spacing={10}>
+      <Box height="600px" bg="red"></Box>
+
+      <SendTip address={address} />
+    </SimpleGrid>
+  );
 }
