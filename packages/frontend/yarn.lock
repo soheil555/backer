@@ -1574,7 +1574,7 @@
   "resolved" "https://registry.npmjs.org/@uauth/web3modal/-/web3modal-1.1.0.tgz"
   "version" "1.1.0"
 
-"@unstoppabledomains/resolution@^7.0":
+"@unstoppabledomains/resolution@^7.0", "@unstoppabledomains/resolution@^7.1.4":
   "integrity" "sha512-GdXLpP+oRk4lLWMISo7g7gPyKoCONyLoQtYH6GVhXtyY9t+CeHJW2kZ/btcbXg0lmEO6PSr5yYOlDz4wRCq2RA=="
   "resolved" "https://registry.npmjs.org/@unstoppabledomains/resolution/-/resolution-7.1.4.tgz"
   "version" "7.1.4"
