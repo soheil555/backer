@@ -1,12 +1,14 @@
 import type { NextPage } from "next";
 import DashboardLayout from "../../components/layout/dashboard";
-import { Box, useToast, Heading } from "@chakra-ui/react";
+import { Box, useToast, Heading, Button } from "@chakra-ui/react";
 import useBackerContract from "../../hooks/useBackerContract";
 import { useEffect, useState } from "react";
 import useAppSelector from "../../hooks/useAppSelector";
 import type { SubscriptionPlan } from "../../types";
 import Plans from "../../components/dashboard/plans";
 import { BigNumber } from "ethers";
+import { PlusSquareIcon } from "@chakra-ui/icons";
+import AddSubscriptionButton from "../../components/dashboard/add-subscription-button";
 
 const SubscriptionPlans: NextPage = () => {
   const toast = useToast();
@@ -51,6 +53,12 @@ const SubscriptionPlans: NextPage = () => {
         <Box w="70%">
           <Plans plans={plans} period={period} creator={address ?? ""} />
         </Box>
+
+        <AddSubscriptionButton
+          colorScheme="purple"
+          leftIcon={<PlusSquareIcon fontSize="3xl" />}
+          mt={4}
+        />
       </Box>
     </DashboardLayout>
   );
