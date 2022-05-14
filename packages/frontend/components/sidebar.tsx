@@ -5,7 +5,6 @@ import {
   Icon,
   Text,
   Flex,
-  useDisclosure,
   Drawer,
   DrawerBody,
   DrawerOverlay,
@@ -13,12 +12,9 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerFooter,
-  Button,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import type { Route } from "../routes";
-import { IconType } from "react-icons";
-import { useRef } from "react";
 
 type SidebarProps = {
   routes: Route[];

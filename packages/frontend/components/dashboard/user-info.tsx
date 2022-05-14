@@ -1,5 +1,6 @@
 import { Box, Heading, SimpleGrid, Text, Tooltip } from "@chakra-ui/react";
 import useAppSelector from "../../hooks/useAppSelector";
+import Card from "../card";
 
 export default function UserInfo() {
   const { address, user } = useAppSelector((state) => state.web3);
@@ -11,9 +12,9 @@ export default function UserInfo() {
   };
 
   return (
-    <SimpleGrid minChildWidth="450px" mb={10} p={4} spacing={10} bg="gray.50">
+    <Card mb={10} minH="90px" flexWrap="wrap" gap={4}>
       {isUser && (
-        <Box>
+        <Box minW="400px" flex={1}>
           <Heading fontWeight="light" mb={1} fontSize={20}>
             UNS Domain name
           </Heading>
@@ -31,7 +32,7 @@ export default function UserInfo() {
         </Box>
       )}
 
-      <Box>
+      <Box minW="400px" flex={1}>
         <Heading fontWeight="light" mb={1} fontSize={20}>
           Wallet Address
         </Heading>
@@ -47,6 +48,6 @@ export default function UserInfo() {
           </Tooltip>
         </Text>
       </Box>
-    </SimpleGrid>
+    </Card>
   );
 }

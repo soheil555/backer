@@ -13,9 +13,4 @@ export const dashboardRoutes: Route[] = [
     name: "Dashboard",
     icon: MdHome,
   },
-  {
-    path: "/dashboard/profile",
-    name: "Profile",
-    icon: MdPerson,
-  },
 ];

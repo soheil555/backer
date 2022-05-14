@@ -3,20 +3,14 @@ import { MdAccountBalanceWallet } from "react-icons/md";
 import useAccountBalance from "../../hooks/useAccountBalance";
 import useAppSelector from "../../hooks/useAppSelector";
 import { parseBalance } from "../../utils";
+import Card from "../card";
 
 export default function Balance() {
   const { address } = useAppSelector((state) => state.web3);
   const { data } = useAccountBalance(address);
 
   return (
-    <Flex
-      justify="space-between"
-      align="center"
-      p={4}
-      borderRadius="lg"
-      minH="120px"
-      bg="gray.50"
-    >
+    <Card justifyContent="space-between" alignItems="center">
       <Box>
         <Stat alignItems="center">
           <StatLabel>Account Balance</StatLabel>
@@ -24,6 +18,6 @@ export default function Balance() {
         </Stat>
       </Box>
       <Icon as={MdAccountBalanceWallet} fontSize="5xl" />
-    </Flex>
+    </Card>
   );
 }
