@@ -144,4 +144,30 @@ describe("Backer", function () {
       ethers.utils.parseEther("89")
     );
   });
+
+  it("should send tip", async function () {
+    const [_, creator, supporter] = await ethers.getSigners();
+
+    let tx = await backer
+      .connect(supporter)
+      .deposit({ value: ethers.utils.parseEther("100") });
+    await tx.wait();
+
+    tx = await backer
+      .connect(supporter)
+      .sendTip(creator.address, ethers.utils.parseEther("20"));
+    await tx.wait();
+
+    let creatorBalance = await backer.getBalance(creator.address);
+    let supporterBalance = await backer.getBalance(supporter.address);
+
+    expect(creatorBalance).to.eq(ethers.utils.parseEther("20"));
+    expect(supporterBalance).to.eq(ethers.utils.parseEther("80"));
+
+    await expect(
+      backer
+        .connect(supporter)
+        .sendTip(creator.address, ethers.utils.parseEther("100"))
+    ).to.be.revertedWith("not enough fund");
+  });
 });
