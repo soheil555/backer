@@ -1,6 +1,7 @@
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import SendTip from "./send-tip";
-
+import SubscriptionPlans from "../../components/dashboard/subscription-plans";
+import Card from "../card";
 interface Props {
   address: string;
 }
@@ -10,7 +11,9 @@ export default function CreatorSupport({ address }: Props) {
 
   return (
     <SimpleGrid mt={10} minChildWidth="400px" spacing={10}>
-      <Box height="600px" bg="red"></Box>
+      <Card>
+        <SubscriptionPlans creator={address} />
+      </Card>
 
       <SendTip address={address} />
     </SimpleGrid>
