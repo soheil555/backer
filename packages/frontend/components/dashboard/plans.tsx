@@ -22,7 +22,7 @@ export default function Plans({ plans, creator }: Props) {
             />
           ))
         ) : (
-          <Heading color="gray.500">You have no subscription plan.</Heading>
+          <Heading color="gray.500">No subscription plan is available.</Heading>
         )}
       </SimpleGrid>
     </Card>
