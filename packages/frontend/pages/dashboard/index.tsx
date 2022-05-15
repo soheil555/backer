@@ -1,5 +1,5 @@
 import DashboardLayout from "../../layouts/Dashboard";
-import { SimpleGrid, Box } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import UserBalance from "../../components/User/UserBalance";
 import UserInfo from "../../components/User/UserInfo";
 import UserDepositWithdraw from "../../components/User/UserDepositWithdraw";
@@ -8,14 +8,19 @@ import { ReactElement } from "react";
 
 const Dashboard: Page = () => {
   return (
-    <Box>
-      <UserInfo />
+    <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+      <GridItem colSpan={2}>
+        <UserInfo />
+      </GridItem>
 
-      <SimpleGrid minChildWidth="450px" spacing={10}>
+      <GridItem colSpan={{ sm: 2, lg: 1 }}>
         <UserBalance />
+      </GridItem>
+
+      <GridItem colSpan={{ sm: 2, lg: 1 }}>
         <UserDepositWithdraw />
-      </SimpleGrid>
-    </Box>
+      </GridItem>
+    </Grid>
   );
 };
 

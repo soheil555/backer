@@ -28,7 +28,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
   const { web3Provider, address } = useAppSelector((state) => state.web3);
   const backer = useBackerContract();
 
-  const [value, setValue] = useState<string>("");
+  const [depositValue, setDepositValue] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const buttonDisabled = !(!!web3Provider || !!backer);
@@ -39,7 +39,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
 
       await backer!
         .connect(signer)
-        .deposit({ value: ethers.utils.parseEther(value) });
+        .deposit({ value: ethers.utils.parseEther(depositValue) });
 
       toast({
         title: "Deposit",
@@ -49,7 +49,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
         duration: 5000,
       });
 
-      setValue("");
+      setDepositValue("");
       onClose();
     } catch (error) {
       console.error(error);
@@ -78,12 +78,12 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
             deposit Matic to start supporting your favorite creator
             <NumberInput
               onChange={(newValue) => {
-                setValue(newValue);
+                setDepositValue(newValue);
               }}
-              value={value}
+              value={depositValue}
               mt={2}
               defaultValue={0}
-              precision={2}
+              precision={3}
               step={0.5}
               min={0}
             >
@@ -106,7 +106,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
             </Button>
             <Button
               onClick={handleDeposit}
-              isDisabled={value.length === 0}
+              isDisabled={depositValue.length === 0}
               colorScheme="purple"
             >
               Deposit

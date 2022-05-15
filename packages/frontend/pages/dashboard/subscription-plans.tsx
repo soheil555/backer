@@ -11,7 +11,7 @@ const SubscriptionPlans: Page = () => {
   const { address } = useAppSelector((state) => state.web3);
 
   return (
-    <DashboardLayout>
+    <Box>
       {!!address && (
         <Box display="flex" flexDirection="column" alignItems="center">
           <SubscriptionPlansComponent creator={address} />
@@ -23,7 +23,7 @@ const SubscriptionPlans: Page = () => {
           />
         </Box>
       )}
-    </DashboardLayout>
+    </Box>
   );
 };
 

@@ -12,7 +12,7 @@ export default function UserInfo() {
   };
 
   return (
-    <Card mb={10} minH="90px" flexWrap="wrap" gap={4}>
+    <Card alignItems="center" flexWrap="wrap" gap={4}>
       {isUser && (
         <Box minW="400px" flex={1}>
           <Heading fontWeight="light" mb={1} fontSize={20}>

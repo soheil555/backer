@@ -14,6 +14,7 @@ const Card = forwardRef<CardProps, "div">(({ children, ...restProps }, ref) => {
       bg="gray.50"
       ref={ref}
       minH="120px"
+      w="100%"
       {...restProps}
     >
       {children}
