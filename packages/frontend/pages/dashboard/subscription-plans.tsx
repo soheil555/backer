@@ -1,13 +1,12 @@
 import type { NextPage } from "next";
 import DashboardLayout from "../../components/layout/dashboard";
-import { Box, useToast, Heading, Button } from "@chakra-ui/react";
+import { Box, useToast, Heading, IconButton } from "@chakra-ui/react";
 import useBackerContract from "../../hooks/useBackerContract";
 import { useEffect, useState } from "react";
 import useAppSelector from "../../hooks/useAppSelector";
 import type { SubscriptionPlan } from "../../types";
 import Plans from "../../components/dashboard/plans";
-import { BigNumber } from "ethers";
-import { PlusSquareIcon } from "@chakra-ui/icons";
+import { PlusSquareIcon, RepeatIcon } from "@chakra-ui/icons";
 import AddSubscriptionButton from "../../components/dashboard/add-subscription-button";
 
 const SubscriptionPlans: NextPage = () => {
@@ -15,7 +14,7 @@ const SubscriptionPlans: NextPage = () => {
   const { web3Provider, address } = useAppSelector((state) => state.web3);
   const backer = useBackerContract();
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
-  const [period, setPeriod] = useState<BigNumber>();
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     if (web3Provider && backer && address) {
@@ -24,13 +23,7 @@ const SubscriptionPlans: NextPage = () => {
         .connect(signer)
         .getCreatorSubscriptionPlans(address)
         .then((plans) => {
-          backer
-            .period()
-            .then((period) => {
-              setPeriod(period);
-              setPlans(plans);
-            })
-            .catch(console.error);
+          setPlans(plans);
         })
         .catch(() => {
           toast({
@@ -42,16 +35,26 @@ const SubscriptionPlans: NextPage = () => {
           });
         });
     }
-  }, [web3Provider, address]);
+  }, [web3Provider, address, backer, refresh]);
 
   return (
     <DashboardLayout>
       <Box display="flex" flexDirection="column" alignItems="center">
-        <Heading mb={4} fontWeight="light">
-          Your subscription plans
-        </Heading>
+        <Box mb={4} display="flex" alignItems="center" gap={3}>
+          <Heading fontWeight="light">Your subscription plans</Heading>
+
+          <IconButton
+            colorScheme="purple"
+            variant="outline"
+            aria-label="refresh plans"
+            icon={<RepeatIcon />}
+            _hover={{ color: "white", bg: "purple.500" }}
+            onClick={() => setRefresh(!refresh)}
+          />
+        </Box>
+
         <Box w="70%">
-          <Plans plans={plans} period={period} creator={address ?? ""} />
+          <Plans plans={plans} creator={address ?? ""} />
         </Box>
 
         <AddSubscriptionButton

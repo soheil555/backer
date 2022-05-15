@@ -32,7 +32,7 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
   const backer = useBackerContract();
   const { data: accountBalance } = useAccountBalance(address);
 
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const buttonDisabled = !(!!web3Provider || !!backer);
@@ -41,9 +41,7 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
     try {
       const signer = web3Provider!.getSigner(address);
 
-      await backer!
-        .connect(signer)
-        .withdraw(ethers.utils.parseEther(String(value)));
+      await backer!.connect(signer).withdraw(ethers.utils.parseEther(value));
 
       toast({
         title: "Withdraw",
@@ -53,7 +51,7 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
         duration: 5000,
       });
 
-      setValue(0);
+      setValue("");
       onClose();
     } catch (error) {
       console.error(error);
@@ -85,14 +83,14 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
                 mt={2}
                 mr={2}
                 onClick={() => {
-                  setValue(Number(parseBalance(accountBalance ?? 0, 18, 5)));
+                  setValue(parseBalance(accountBalance ?? 0, 18, 5));
                 }}
               >
                 Max
               </Button>
               <NumberInput
                 onChange={(newValue) => {
-                  setValue(Number(newValue));
+                  setValue(newValue);
                 }}
                 value={value}
                 mt={2}
@@ -122,7 +120,7 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
             </Button>
             <Button
               onClick={handleWithdraw}
-              isDisabled={value == 0}
+              isDisabled={value.length === 0}
               colorScheme="purple"
             >
               Withdraw
