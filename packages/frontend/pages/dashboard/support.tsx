@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import DashboardLayout from "../../components/layout/dashboard";
 import { utils } from "ethers";
 import {
@@ -12,12 +11,13 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import Resolution from "@unstoppabledomains/resolution";
-import { useState } from "react";
+import { useState, ReactElement } from "react";
 import CreatorSupport from "../../components/dashboard/creator-support";
+import { Page } from "../../types/page";
 
 const resolution = new Resolution();
 
-const Support: NextPage = () => {
+const Support: Page = () => {
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsloading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -47,7 +47,7 @@ const Support: NextPage = () => {
   };
 
   return (
-    <DashboardLayout>
+    <Box>
       <Box display="flex" justifyContent="center">
         <Box>
           <FormControl mb={3} w="450px" isInvalid={error.length !== 0}>
@@ -84,8 +84,12 @@ const Support: NextPage = () => {
       </Box>
 
       <CreatorSupport address={address} />
-    </DashboardLayout>
+    </Box>
   );
 };
+
+Support.getLayout = (page: ReactElement) => (
+  <DashboardLayout>{page}</DashboardLayout>
+);
 
 export default Support;

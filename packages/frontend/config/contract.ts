@@ -1,6 +1,11 @@
-export const backer = {
-  localhost: {
-    address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-    period: 10,
-  },
-};
+const network = process.env.NETWORK;
+
+let address: string;
+let period: number;
+
+if (network === "localhost") {
+  address = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  period = 10;
+}
+
+export { address, period };

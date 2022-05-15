@@ -1,6 +1,6 @@
 import type { BigNumberish } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
-import { backer } from "./config/contract";
+import { period } from "./config/contract";
 
 export function parseBalance(
   value: BigNumberish,
@@ -44,5 +44,5 @@ export function secondsToMdhms(seconds: number) {
 }
 
 export function parsePeriod() {
-  return secondsToMdhms(backer.localhost.period);
+  return secondsToMdhms(period);
 }
