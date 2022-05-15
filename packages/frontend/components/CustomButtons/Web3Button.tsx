@@ -1,15 +1,15 @@
 import { useCallback, useMemo, useEffect } from "react";
 import * as Web3Modal from "web3modal";
-import { providerOptions } from "../config/provider-options";
+import { providerOptions } from "../../config/provider-options";
 import { ethers } from "ethers";
-import useAppSelector from "../hooks/useAppSelector";
-import useAppDispatch from "../hooks/useAppDispatch";
+import useAppSelector from "../../hooks/useAppSelector";
+import useAppDispatch from "../../hooks/useAppDispatch";
 import * as UAuthWeb3Modal from "@uauth/web3modal";
 import {
   resetWeb3Provider,
   setAddress,
   setWeb3Provider,
-} from "../redux/slices/web3Slice";
+} from "../../redux/slices/web3Slice";
 import { Button, ButtonProps, forwardRef } from "@chakra-ui/react";
 
 let web3Modal: Web3Modal.default;

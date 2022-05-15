@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
-import { Box, Container } from "@chakra-ui/react";
-import Sidebar from "../sidebar";
-import { dashboardRoutes } from "../../routes";
-import Navbar from "../dashboard/navbar";
+import type { ReactNode } from "react";
+import { Box } from "@chakra-ui/react";
+import Sidebar from "../components/Sidebar/Sidebar";
+import { dashboardRoutes } from "../routes";
+import DashboardNavbar from "../components/Navbars/DashboardNavbar";
 
 interface Props {
   children: ReactNode;
@@ -11,7 +11,7 @@ interface Props {
 export default function Dashboard({ children }: Props) {
   return (
     <Box>
-      <Navbar />
+      <DashboardNavbar />
       <Box display={{ sm: "none", lg: "block" }}>
         <Sidebar routes={dashboardRoutes} />
       </Box>

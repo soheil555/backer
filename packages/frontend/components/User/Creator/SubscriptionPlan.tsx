@@ -1,7 +1,7 @@
 import { Box, Heading, Text, Button, ButtonGroup } from "@chakra-ui/react";
-import useAppSelector from "../../hooks/useAppSelector";
-import { SubscriptionPlan } from "../../types";
-import { parseBalance, parsePeriod } from "../../utils";
+import useAppSelector from "../../../hooks/useAppSelector";
+import { SubscriptionPlan } from "../../../types/subscription-plan";
+import { parseBalance, parsePeriod } from "../../../utils";
 
 type Props = {} & SubscriptionPlan;
 

@@ -1,10 +1,17 @@
-import { Box, useToast, Heading, IconButton } from "@chakra-ui/react";
-import useBackerContract from "../../hooks/useBackerContract";
+import {
+  Box,
+  useToast,
+  Heading,
+  IconButton,
+  SimpleGrid,
+} from "@chakra-ui/react";
+import useBackerContract from "../../../hooks/useBackerContract";
 import { useEffect, useState } from "react";
-import useAppSelector from "../../hooks/useAppSelector";
-import type { SubscriptionPlan } from "../../types";
-import Plans from "../../components/dashboard/plans";
+import useAppSelector from "../../../hooks/useAppSelector";
+import type { SubscriptionPlan } from "../../../types/subscription-plan";
 import { RepeatIcon } from "@chakra-ui/icons";
+import SubscriptionPlanComponent from "./SubscriptionPlan";
+import Card from "../../Card/Card";
 
 interface Props {
   creator: string;
@@ -53,7 +60,24 @@ export default function SubscriptionPlans({ creator }: Props) {
         </Box>
 
         <Box w="70%">
-          <Plans plans={plans} creator={creator} />
+          <Card flexDirection="column" height="400px" overflowY="scroll">
+            <SimpleGrid minChildWidth="250px" spacing={10}>
+              {plans.length > 0 ? (
+                plans.map((plan) => (
+                  <SubscriptionPlanComponent
+                    id={plan.id}
+                    name={plan.name}
+                    amountPerPeriod={plan.amountPerPeriod}
+                    creator={creator}
+                  />
+                ))
+              ) : (
+                <Heading color="gray.500">
+                  No subscription plan is available.
+                </Heading>
+              )}
+            </SimpleGrid>
+          </Card>
         </Box>
       </Box>
     </Box>

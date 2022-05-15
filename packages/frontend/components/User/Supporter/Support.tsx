@@ -1,12 +1,12 @@
 import { Box, SimpleGrid } from "@chakra-ui/react";
-import SendTip from "./send-tip";
-import SubscriptionPlans from "../../components/dashboard/subscription-plans";
-import Card from "../card";
+import SendTip from "./SendTip";
+import SubscriptionPlans from "../Creator/SubscriptionPlans";
+import Card from "../../Card/Card";
 interface Props {
   address: string;
 }
 
-export default function CreatorSupport({ address }: Props) {
+export default function Support({ address }: Props) {
   if (address.length === 0) return null;
 
   return (

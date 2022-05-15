@@ -1,11 +1,11 @@
-import { Box, Stat, StatLabel, StatNumber, Flex, Icon } from "@chakra-ui/react";
+import { Box, Stat, StatLabel, StatNumber, Icon } from "@chakra-ui/react";
 import { MdAccountBalanceWallet } from "react-icons/md";
 import useAccountBalance from "../../hooks/useAccountBalance";
 import useAppSelector from "../../hooks/useAppSelector";
 import { parseBalance } from "../../utils";
-import Card from "../card";
+import Card from "../Card/Card";
 
-export default function Balance() {
+export default function UserBalance() {
   const { address } = useAppSelector((state) => state.web3);
   const { data } = useAccountBalance(address);
 

@@ -1,4 +1,4 @@
-import DashboardLayout from "../../components/layout/dashboard";
+import DashboardLayout from "../../layouts/Dashboard";
 import { utils } from "ethers";
 import {
   Input,
@@ -12,7 +12,7 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import Resolution from "@unstoppabledomains/resolution";
 import { useState, ReactElement } from "react";
-import CreatorSupport from "../../components/dashboard/creator-support";
+import CreatorSupport from "../../components/User/Supporter/Support";
 import { Page } from "../../types/page";
 
 const resolution = new Resolution();

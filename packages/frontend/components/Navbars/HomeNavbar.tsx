@@ -1,6 +1,6 @@
 import { Container, Heading, Box } from "@chakra-ui/react";
 
-export default function Navbar() {
+export default function HomeNavbar() {
   return (
     <Box w="100%" h="5rem">
       <Container

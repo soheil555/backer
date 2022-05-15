@@ -4,11 +4,14 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import useAppSelector from "../hooks/useAppSelector";
 import { useRouter } from "next/router";
-import Navbar from "../components/navbar";
+import HomeNavbar from "../components/Navbars/HomeNavbar";
 
-const Web3Button = dynamic(() => import("../components/web3-button"), {
-  ssr: false,
-});
+const Web3Button = dynamic(
+  () => import("../components/CustomButtons/Web3Button"),
+  {
+    ssr: false,
+  }
+);
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -22,7 +25,7 @@ const Home: NextPage = () => {
 
   return (
     <Box>
-      <Navbar />
+      <HomeNavbar />
       <Container
         maxW="container.lg"
         display="flex"

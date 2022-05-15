@@ -14,7 +14,7 @@ import {
   DrawerFooter,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import type { Route } from "../routes";
+import type { Route } from "../../routes";
 
 type SidebarProps = {
   routes: Route[];
@@ -69,7 +69,7 @@ export function SidebarResponsive({
   onClose,
 }: SidebarResponsiveProps) {
   return (
-    <Drawer placement="left" isOpen={isOpen} onClose={onClose}>
+    <Drawer size="sm" placement="left" isOpen={isOpen} onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent bg="purple.50">
         <DrawerCloseButton />

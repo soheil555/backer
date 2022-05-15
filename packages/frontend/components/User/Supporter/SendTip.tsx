@@ -1,4 +1,4 @@
-import Card from "../card";
+import Card from "../../Card/Card";
 import {
   Heading,
   Box,
@@ -10,11 +10,11 @@ import {
   NumberDecrementStepper,
   useToast,
 } from "@chakra-ui/react";
-import useAccountBalance from "../../hooks/useAccountBalance";
+import useAccountBalance from "../../../hooks/useAccountBalance";
 import { useState } from "react";
-import { parseBalance } from "../../utils";
-import useAppSelector from "../../hooks/useAppSelector";
-import useBackerContract from "../../hooks/useBackerContract";
+import { parseBalance } from "../../../utils";
+import useAppSelector from "../../../hooks/useAppSelector";
+import useBackerContract from "../../../hooks/useBackerContract";
 import { ethers } from "ethers";
 
 interface Props {

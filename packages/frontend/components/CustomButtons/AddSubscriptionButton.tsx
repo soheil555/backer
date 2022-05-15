@@ -60,7 +60,7 @@ const AddSubscriptionButton = forwardRef<ButtonProps, "button">(
 
           onClose();
           setName("");
-          setAmountPerPeriod(0);
+          setAmountPerPeriod("");
         } catch (error) {
           console.error(error);
           toast({

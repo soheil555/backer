@@ -1,6 +1,6 @@
-import { Box, Heading, SimpleGrid, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Heading, Text, Tooltip } from "@chakra-ui/react";
 import useAppSelector from "../../hooks/useAppSelector";
-import Card from "../card";
+import Card from "../Card/Card";
 
 export default function UserInfo() {
   const { address, user } = useAppSelector((state) => state.web3);

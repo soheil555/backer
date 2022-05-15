@@ -17,7 +17,6 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   useToast,
-  Center,
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { useState } from "react";

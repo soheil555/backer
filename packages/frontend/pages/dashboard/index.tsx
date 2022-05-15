@@ -1,8 +1,8 @@
-import DashboardLayout from "../../components/layout/dashboard";
+import DashboardLayout from "../../layouts/Dashboard";
 import { SimpleGrid, Box } from "@chakra-ui/react";
-import Balance from "../../components/dashboard/balance";
-import UserInfo from "../../components/dashboard/user-info";
-import DepositWithdraw from "../../components/dashboard/deposit-withdraw";
+import UserBalance from "../../components/User/UserBalance";
+import UserInfo from "../../components/User/UserInfo";
+import UserDepositWithdraw from "../../components/User/UserDepositWithdraw";
 import { Page } from "../../types/page";
 import { ReactElement } from "react";
 
@@ -12,8 +12,8 @@ const Dashboard: Page = () => {
       <UserInfo />
 
       <SimpleGrid minChildWidth="450px" spacing={10}>
-        <Balance />
-        <DepositWithdraw />
+        <UserBalance />
+        <UserDepositWithdraw />
       </SimpleGrid>
     </Box>
   );

@@ -5,16 +5,16 @@ import {
   useDisclosure,
   IconButton,
 } from "@chakra-ui/react";
-import { SidebarResponsive } from "../sidebar";
+import { SidebarResponsive } from "../Sidebar/Sidebar";
 import { dashboardRoutes } from "../../routes";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import dynamic from "next/dynamic";
 
-const Web3Button = dynamic(() => import("../../components/web3-button"), {
+const Web3Button = dynamic(() => import("../CustomButtons/Web3Button"), {
   ssr: false,
 });
 
-export default function Navbar() {
+export default function DashboardNavbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
