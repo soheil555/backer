@@ -31,6 +31,7 @@ interface BackerInterface extends ethers.utils.Interface {
     "getCreatorPayment()": FunctionFragment;
     "getCreatorSubscribers(address)": FunctionFragment;
     "getCreatorSubscriptionPlans(address)": FunctionFragment;
+    "getSupporterCreatorSubscription(address,address)": FunctionFragment;
     "getSupporterSubscriptions(address)": FunctionFragment;
     "newSubscriptionPlan(uint256,string)": FunctionFragment;
     "period()": FunctionFragment;
@@ -68,6 +69,10 @@ interface BackerInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getCreatorSubscriptionPlans",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSupporterCreatorSubscription",
+    values: [string, string]
   ): string;
   encodeFunctionData(
     functionFragment: "getSupporterSubscriptions",
@@ -119,6 +124,10 @@ interface BackerInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getCreatorSubscriptionPlans",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSupporterCreatorSubscription",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -278,6 +287,34 @@ export class Backer extends BaseContract {
       ]
     >;
 
+    getSupporterCreatorSubscription(
+      supporter: string,
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [
+          [BigNumber, string, string, BigNumber] & {
+            id: BigNumber;
+            name: string;
+            creator: string;
+            amountPerPeriod: BigNumber;
+          },
+          BigNumber,
+          boolean
+        ] & {
+          subscriptionPlan: [BigNumber, string, string, BigNumber] & {
+            id: BigNumber;
+            name: string;
+            creator: string;
+            amountPerPeriod: BigNumber;
+          };
+          afterLastPeriod: BigNumber;
+          initialized: boolean;
+        }
+      ]
+    >;
+
     getSupporterSubscriptions(
       supporter: string,
       overrides?: CallOverrides
@@ -380,6 +417,32 @@ export class Backer extends BaseContract {
     })[]
   >;
 
+  getSupporterCreatorSubscription(
+    supporter: string,
+    creator: string,
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      [BigNumber, string, string, BigNumber] & {
+        id: BigNumber;
+        name: string;
+        creator: string;
+        amountPerPeriod: BigNumber;
+      },
+      BigNumber,
+      boolean
+    ] & {
+      subscriptionPlan: [BigNumber, string, string, BigNumber] & {
+        id: BigNumber;
+        name: string;
+        creator: string;
+        amountPerPeriod: BigNumber;
+      };
+      afterLastPeriod: BigNumber;
+      initialized: boolean;
+    }
+  >;
+
   getSupporterSubscriptions(
     supporter: string,
     overrides?: CallOverrides
@@ -471,6 +534,32 @@ export class Backer extends BaseContract {
         creator: string;
         amountPerPeriod: BigNumber;
       })[]
+    >;
+
+    getSupporterCreatorSubscription(
+      supporter: string,
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        [BigNumber, string, string, BigNumber] & {
+          id: BigNumber;
+          name: string;
+          creator: string;
+          amountPerPeriod: BigNumber;
+        },
+        BigNumber,
+        boolean
+      ] & {
+        subscriptionPlan: [BigNumber, string, string, BigNumber] & {
+          id: BigNumber;
+          name: string;
+          creator: string;
+          amountPerPeriod: BigNumber;
+        };
+        afterLastPeriod: BigNumber;
+        initialized: boolean;
+      }
     >;
 
     getSupporterSubscriptions(
@@ -660,6 +749,12 @@ export class Backer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getSupporterCreatorSubscription(
+      supporter: string,
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getSupporterSubscriptions(
       supporter: string,
       overrides?: CallOverrides
@@ -727,6 +822,12 @@ export class Backer extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getCreatorSubscriptionPlans(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSupporterCreatorSubscription(
+      supporter: string,
       creator: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

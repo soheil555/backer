@@ -264,7 +264,7 @@ contract Backer is ReEntrancyGuard {
         );
     }
 
-    function getSupporterCreatorSubscription(address supporter, address creator) external view {
+    function getSupporterCreatorSubscription(address supporter, address creator) external view returns (Subscription memory) {
         return supporterCreatorSubscription[supporter][creator];
     }
 

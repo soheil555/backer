@@ -307,6 +307,69 @@
         "internalType": "address",
         "name": "supporter",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      }
+    ],
+    "name": "getSupporterCreatorSubscription",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "address",
+                "name": "creator",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amountPerPeriod",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct Backer.SubscriptionPlan",
+            "name": "subscriptionPlan",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "afterLastPeriod",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "initialized",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct Backer.Subscription",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "supporter",
+        "type": "address"
       }
     ],
     "name": "getSupporterSubscriptions",
