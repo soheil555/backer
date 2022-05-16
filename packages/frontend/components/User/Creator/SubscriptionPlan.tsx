@@ -2,6 +2,7 @@ import { Box, Heading, Text, Button, ButtonGroup } from "@chakra-ui/react";
 import useAppSelector from "../../../hooks/useAppSelector";
 import { SubscriptionPlan } from "../../../types/subscription-plan";
 import { parseBalance, parsePeriod } from "../../../utils";
+import SubscribeButton from "../../CustomButtons/SubscribeButton";
 
 type Props = {} & SubscriptionPlan;
 
@@ -27,10 +28,15 @@ export default function Plan({ id, name, amountPerPeriod, creator }: Props) {
       </Text>
 
       <ButtonGroup variant="outline" spacing={6}>
-        {isCreator ? (
+        {!isCreator ? (
           <Button colorScheme="red">Delete</Button>
         ) : (
-          <Button colorScheme="purple">Subscribe</Button>
+          <SubscribeButton
+            creator={creator}
+            subscriptionPlanId={id}
+            colorScheme="purple"
+            amountPerPeriod={amountPerPeriod}
+          />
         )}
       </ButtonGroup>
     </Box>
