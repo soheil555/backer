@@ -64,7 +64,7 @@ export default function SendTip({ address }: Props) {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
-      height="250px"
+      minH="250px"
     >
       <Heading fontWeight="light" mb={5}>
         Send Tip

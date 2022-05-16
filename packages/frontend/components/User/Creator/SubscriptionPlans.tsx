@@ -45,42 +45,35 @@ export default function SubscriptionPlans({ creator }: Props) {
   }, [web3Provider, backer, refresh]);
 
   return (
-    <Box w="100%">
-      <Box display="flex" flexDirection="column" alignItems="center">
-        <Box mb={4} display="flex" alignItems="center" gap={3}>
-          <Heading fontWeight="light">Subscription plans</Heading>
-
-          <IconButton
-            colorScheme="purple"
-            variant="outline"
-            aria-label="refresh plans"
-            icon={<RepeatIcon />}
-            _hover={{ color: "white", bg: "purple.500" }}
-            onClick={() => setRefresh(!refresh)}
-          />
-        </Box>
-
-        <Box w="70%">
-          <Card flexDirection="column" height="400px" overflowY="scroll">
-            <SimpleGrid minChildWidth="250px" spacing={10}>
-              {plans.length > 0 ? (
-                plans.map((plan) => (
-                  <SubscriptionPlanComponent
-                    id={plan.id}
-                    name={plan.name}
-                    amountPerPeriod={plan.amountPerPeriod}
-                    creator={creator}
-                  />
-                ))
-              ) : (
-                <Heading color="gray.500">
-                  No subscription plan is available.
-                </Heading>
-              )}
-            </SimpleGrid>
-          </Card>
-        </Box>
+    <Card flexDirection="column" w="100%">
+      <Box display="flex" justifyContent="flex-end" mb={2}>
+        <IconButton
+          onClick={() => setRefresh(!refresh)}
+          aria-label="refresh"
+          icon={<RepeatIcon />}
+        />
       </Box>
-    </Box>
+
+      <SimpleGrid
+        minChildWidth="250px"
+        height="400px"
+        overflowY="scroll"
+        spacing={10}
+        pr={4}
+      >
+        {plans.length > 0 ? (
+          plans.map((plan) => (
+            <SubscriptionPlanComponent
+              id={plan.id}
+              name={plan.name}
+              amountPerPeriod={plan.amountPerPeriod}
+              creator={creator}
+            />
+          ))
+        ) : (
+          <Heading color="gray.500">No subscription plan is available.</Heading>
+        )}
+      </SimpleGrid>
+    </Card>
   );
 }

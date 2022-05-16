@@ -18,7 +18,7 @@ export default function Plan({ id, name, amountPerPeriod, creator }: Props) {
       alignItems="center"
       justifyContent="center"
       gap={2}
-      minHeight="120px"
+      minHeight="250px"
       p={4}
     >
       <Heading fontSize={28}>{name}</Heading>

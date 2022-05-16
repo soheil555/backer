@@ -29,7 +29,7 @@ import useBackerContract from "../../hooks/useBackerContract";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ethers } from "ethers";
 
-const AddSubscriptionButton = forwardRef<ButtonProps, "button">(
+const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
   (props, ref) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -147,4 +147,4 @@ const AddSubscriptionButton = forwardRef<ButtonProps, "button">(
   }
 );
 
-export default AddSubscriptionButton;
+export default AddSubscriptionPlanButton;

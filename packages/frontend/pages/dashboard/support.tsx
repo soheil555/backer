@@ -8,12 +8,15 @@ import {
   FormErrorMessage,
   Button,
   FormHelperText,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import Resolution from "@unstoppabledomains/resolution";
 import { useState, ReactElement } from "react";
-import CreatorSupport from "../../components/User/Supporter/Support";
 import { Page } from "../../types/page";
+import Card from "../../components/Card/Card";
+import SubscriptionPlans from "../../components/User/Creator/SubscriptionPlans";
+import SendTip from "../../components/User/Supporter/SendTip";
 
 const resolution = new Resolution();
 
@@ -83,7 +86,15 @@ const Support: Page = () => {
         </Box>
       </Box>
 
-      <CreatorSupport address={address} />
+      {!!address.length && (
+        <SimpleGrid mt={10} minChildWidth="400px" spacing={10}>
+          <SubscriptionPlans creator={address} />
+
+          <Box height="250px">
+            <SendTip address={address} />
+          </Box>
+        </SimpleGrid>
+      )}
     </Box>
   );
 };

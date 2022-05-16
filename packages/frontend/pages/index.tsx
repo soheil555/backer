@@ -41,8 +41,7 @@ const Home: NextPage = () => {
           A decentralized platform to support your favorite creators on{" "}
           <Box as="span" color="purple.500">
             Polygon
-          </Box>{" "}
-          network.
+          </Box>
         </Text>
 
         <Web3Button
