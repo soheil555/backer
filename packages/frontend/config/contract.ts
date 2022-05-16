@@ -1,4 +1,4 @@
-const network = process.env.NETWORK;
+const network = process.env.NEXT_PUBLIC_NETWORK;
 
 let address: string;
 let period: number;

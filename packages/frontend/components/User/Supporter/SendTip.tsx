@@ -48,6 +48,7 @@ export default function SendTip({ address }: Props) {
 
       setValue(0);
     } catch (error) {
+      console.error(error);
       toast({
         title: "Send Tip",
         description: "Failed to send tip",

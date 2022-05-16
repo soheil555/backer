@@ -34,7 +34,7 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
   const [value, setValue] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const buttonDisabled = !(!!web3Provider || !!backer);
+  const buttonDisabled = !(!!web3Provider && !!backer);
 
   const handleWithdraw = async () => {
     try {

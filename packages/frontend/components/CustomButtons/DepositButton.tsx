@@ -31,7 +31,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
   const [depositValue, setDepositValue] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const buttonDisabled = !(!!web3Provider || !!backer);
+  const buttonDisabled = !(!!web3Provider && !!backer);
 
   const handleDeposit = async () => {
     try {

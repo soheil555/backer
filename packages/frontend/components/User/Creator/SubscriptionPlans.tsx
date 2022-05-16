@@ -31,7 +31,8 @@ export default function SubscriptionPlans({ creator }: Props) {
         .then((plans) => {
           setPlans(plans);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(error);
           toast({
             title: "Plans",
             description: "Faild to fetch user subscription plans",
