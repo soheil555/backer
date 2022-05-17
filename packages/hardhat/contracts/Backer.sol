@@ -3,6 +3,7 @@
 pragma solidity ^0.8.0;
 
 import "./ReEntrancyGuard.sol";
+import "hardhat/console.sol";
 
 contract Backer is ReEntrancyGuard {
     /***** EVENTS *****/
@@ -275,10 +276,12 @@ contract Backer is ReEntrancyGuard {
         require(subscription.initialized);
 
         //you can not get back current period money
-        balances[msg.sender] +=
-            subscription.subscriptionPlan.amountPerPeriod *
-            (subscription.afterLastPeriod - currentPeriod() - 1);
-
+        if(subscription.afterLastPeriod > currentPeriod()){
+            balances[msg.sender] +=
+                subscription.subscriptionPlan.amountPerPeriod *
+                (subscription.afterLastPeriod - currentPeriod() - 1);
+        }
+  
         for (
             uint256 periodNum = currentPeriod() + 1;
             periodNum < subscription.afterLastPeriod;

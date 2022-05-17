@@ -1,12 +1,22 @@
 import { Box, Heading, Text, Button, ButtonGroup } from "@chakra-ui/react";
+import { BigNumber } from "ethers";
 import useAppSelector from "../../../hooks/useAppSelector";
-import { SubscriptionPlan } from "../../../types/subscription-plan";
+import { SubscriptionPlan as SubscriptionPlanType } from "../../../types/subscription-plan";
 import { parseBalance, parsePeriod } from "../../../utils";
 import SubscribeButton from "../../CustomButtons/SubscribeButton";
+import UnsubscribeButton from "../../CustomButtons/UnsubscribeButton";
 
-type Props = {} & SubscriptionPlan;
+type Props = {
+  currentPlanId?: BigNumber;
+} & SubscriptionPlanType;
 
-export default function Plan({ id, name, amountPerPeriod, creator }: Props) {
+export default function SubscriptionPlan({
+  id,
+  name,
+  amountPerPeriod,
+  creator,
+  currentPlanId,
+}: Props) {
   const { address } = useAppSelector((state) => state.web3);
   const isCreator = address === creator;
 
@@ -28,16 +38,22 @@ export default function Plan({ id, name, amountPerPeriod, creator }: Props) {
       </Text>
 
       <ButtonGroup variant="outline" spacing={6}>
-        {!isCreator ? (
+        {isCreator ? (
           <Button colorScheme="red">Delete</Button>
         ) : (
-          <SubscribeButton
-            creator={creator}
-            subscriptionPlanId={id}
-            colorScheme="purple"
-            amountPerPeriod={amountPerPeriod}
-          />
+          !currentPlanId && (
+            <SubscribeButton
+              creator={creator}
+              subscriptionPlanId={id}
+              colorScheme="purple"
+              amountPerPeriod={amountPerPeriod}
+            />
+          )
         )}
+
+        {!!currentPlanId && currentPlanId.eq(id) ? (
+          <UnsubscribeButton creator={creator} colorScheme="red" />
+        ) : null}
       </ButtonGroup>
     </Box>
   );

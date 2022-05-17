@@ -14,9 +14,9 @@ import { SearchIcon } from "@chakra-ui/icons";
 import Resolution from "@unstoppabledomains/resolution";
 import { useState, ReactElement } from "react";
 import { Page } from "../../types/page";
-import Card from "../../components/Card/Card";
 import SubscriptionPlans from "../../components/User/Creator/SubscriptionPlans";
 import SendTip from "../../components/User/Supporter/SendTip";
+import UnsubscribeButton from "../../components/CustomButtons/UnsubscribeButton";
 
 const resolution = new Resolution();
 
@@ -57,7 +57,6 @@ const Support: Page = () => {
             <FormLabel htmlFor="email">
               The Creator UNS Domain/Ethereum address
             </FormLabel>
-
             <Input
               value={input}
               onChange={(event) => setInput(event.target.value)}

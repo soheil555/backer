@@ -143,6 +143,23 @@ describe("Backer", function () {
     expect(await backer.getBalance(supporter.address)).to.eq(
       ethers.utils.parseEther("89")
     );
+
+    tx = await backer.connect(supporter).subscribe(creator.address, 1, 10);
+    await tx.wait();
+
+    expect(await backer.getBalance(supporter.address)).to.eq(
+      ethers.utils.parseEther("79")
+    );
+
+    await ethers.provider.send("evm_increaseTime", [12 * period]);
+    await ethers.provider.send("evm_mine", []);
+
+    tx = await backer.connect(supporter).cancelSubscribe(creator.address);
+    await tx.wait();
+
+    expect(await backer.getBalance(supporter.address)).to.eq(
+      ethers.utils.parseEther("79")
+    );
   });
 
   it("should send tip", async function () {

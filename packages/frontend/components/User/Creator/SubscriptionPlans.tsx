@@ -12,6 +12,7 @@ import type { SubscriptionPlan } from "../../../types/subscription-plan";
 import { RepeatIcon } from "@chakra-ui/icons";
 import SubscriptionPlanComponent from "./SubscriptionPlan";
 import Card from "../../Card/Card";
+import { BigNumber } from "ethers";
 
 interface Props {
   creator: string;
@@ -19,20 +20,29 @@ interface Props {
 
 export default function SubscriptionPlans({ creator }: Props) {
   const toast = useToast();
-  const { web3Provider } = useAppSelector((state) => state.web3);
+  const { web3Provider, address } = useAppSelector((state) => state.web3);
   const backer = useBackerContract();
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [currentPlanId, setCurrentPlanId] = useState<BigNumber>();
 
   useEffect(() => {
-    if (web3Provider && backer) {
-      backer
-        .getCreatorSubscriptionPlans(creator)
-        .then((plans) => {
+    if (web3Provider && backer && address) {
+      (async () => {
+        try {
+          const plans = await backer.getCreatorSubscriptionPlans(creator);
+          const currentPlan = await backer.getSupporterCreatorSubscription(
+            address,
+            creator
+          );
+
+          if (currentPlan.initialized) {
+            setCurrentPlanId(currentPlan.subscriptionPlan.id);
+          }
           setPlans(plans);
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error(error);
+
           toast({
             title: "Plans",
             description: "Faild to fetch user subscription plans",
@@ -40,7 +50,8 @@ export default function SubscriptionPlans({ creator }: Props) {
             isClosable: true,
             duration: 5000,
           });
-        });
+        }
+      })();
     }
   }, [web3Provider, backer, refresh]);
 
@@ -68,6 +79,7 @@ export default function SubscriptionPlans({ creator }: Props) {
               name={plan.name}
               amountPerPeriod={plan.amountPerPeriod}
               creator={creator}
+              currentPlanId={currentPlanId}
             />
           ))
         ) : (
