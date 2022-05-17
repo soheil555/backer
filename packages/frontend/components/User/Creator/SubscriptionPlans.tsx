@@ -38,6 +38,8 @@ export default function SubscriptionPlans({ creator }: Props) {
 
           if (currentPlan.initialized) {
             setCurrentPlanId(currentPlan.subscriptionPlan.id);
+          } else {
+            setCurrentPlanId(undefined);
           }
           setPlans(plans);
         } catch (error) {
