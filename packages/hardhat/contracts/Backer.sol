@@ -3,7 +3,6 @@
 pragma solidity ^0.8.0;
 
 import "./ReEntrancyGuard.sol";
-import "hardhat/console.sol";
 
 contract Backer is ReEntrancyGuard {
     /***** EVENTS *****/
