@@ -1,4 +1,4 @@
-import { Box, Heading, IconButton, SimpleGrid } from "@chakra-ui/react";
+import { Heading, SimpleGrid } from "@chakra-ui/react";
 import useBackerContract from "../../../hooks/useBackerContract";
 import { useEffect, useState } from "react";
 import useAppSelector from "../../../hooks/useAppSelector";
@@ -6,7 +6,6 @@ import SubscriptionPlanComponent from "./SubscriptionPlan";
 import Card from "../../Card/Card";
 import { BigNumber } from "ethers";
 import useSubscriptionPlans from "../../../hooks/useSubscriptionPlans";
-import { RepeatIcon } from "@chakra-ui/icons";
 
 interface Props {
   creator: string;
@@ -41,13 +40,6 @@ export default function SubscriptionPlans({ creator }: Props) {
 
   return (
     <Card flexDirection="column" w="100%">
-      <Box display="flex" justifyContent="flex-end" mb={2}>
-        <IconButton
-          onClick={() => setRefresh(!refresh)}
-          aria-label="refresh"
-          icon={<RepeatIcon />}
-        />
-      </Box>
       <SimpleGrid
         minChildWidth="250px"
         height="400px"

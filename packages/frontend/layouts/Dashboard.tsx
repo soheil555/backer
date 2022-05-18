@@ -8,7 +8,7 @@ interface Props {
   children: ReactNode;
 }
 
-export default function Dashboard({ children }: Props) {
+export default function DashboardLayout({ children }: Props) {
   return (
     <Box>
       <DashboardNavbar />

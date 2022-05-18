@@ -3,27 +3,23 @@ import { Backer } from "../contracts/backer/Backer";
 import useBackerContract from "./useBackerContract";
 import useKeepSWRDataLiveAsBlocksArrive from "./useKeepSWRDataLiveAsBlocksArrive";
 
-function getSubscriptionPlans(backer: Backer) {
+function getCreatorPayment(backer: Backer) {
   return async (_: string, creator: string) => {
     try {
-      return await backer.getCreatorSubscriptionPlans(creator);
+      return await backer.getCreatorPayment(creator);
     } catch (error) {
       console.error(error);
     }
   };
 }
 
-export default function useSubscriptionPlans(
-  creator: string,
-  suspense = false
-) {
+export default function useCreatorPayment(creator?: string, suspense = false) {
   const backer = useBackerContract();
-
-  const shouldFetch = !!backer;
+  const shouldFetch = !!backer && typeof creator === "string";
 
   const result = useSWR(
-    shouldFetch ? ["SubscriptionPlans", creator] : null,
-    getSubscriptionPlans(backer!),
+    shouldFetch ? ["CreatorPayment", creator] : null,
+    getCreatorPayment(backer!),
     { suspense }
   );
 

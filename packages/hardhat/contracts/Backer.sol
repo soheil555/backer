@@ -81,14 +81,14 @@ contract Backer is ReEntrancyGuard {
 
     /***** DEPOSIT & WITHDRAW *****/
 
-    function getCreatorPayment() public view returns (uint256) {
+    function getCreatorPayment(address creator) public view returns (uint256) {
         uint256 amount = 0;
         for (
-            uint256 periodNum = creatorAfterLastClaimsPeriod[msg.sender];
+            uint256 periodNum = creatorAfterLastClaimsPeriod[creator];
             periodNum < currentPeriod();
             periodNum++
         ) {
-            amount += creatorPayments[msg.sender][periodNum];
+            amount += creatorPayments[creator][periodNum];
         }
         return amount;
     }
@@ -113,7 +113,7 @@ contract Backer is ReEntrancyGuard {
     }
 
     function claimCreatorPayment() external {
-        uint256 amount = getCreatorPayment();
+        uint256 amount = getCreatorPayment(msg.sender);
         creatorAfterLastClaimsPeriod[msg.sender] = currentPeriod();
         balances[msg.sender] += amount;
     }

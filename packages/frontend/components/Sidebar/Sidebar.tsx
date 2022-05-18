@@ -42,6 +42,7 @@ const createLinks = (routes: Route[]) => {
           p={3}
           borderRadius="3xl"
           _hover={{ bg: "purple.500", color: "white" }}
+          mb={4}
         >
           <Flex align="center" gap={5}>
             <Icon as={route.icon} /> <Text>{route.name}</Text>

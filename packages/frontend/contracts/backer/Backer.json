@@ -212,7 +212,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      }
+    ],
     "name": "getCreatorPayment",
     "outputs": [
       {

@@ -28,7 +28,7 @@ interface BackerInterface extends ethers.utils.Interface {
     "currentPeriod()": FunctionFragment;
     "deposit()": FunctionFragment;
     "getBalance(address)": FunctionFragment;
-    "getCreatorPayment()": FunctionFragment;
+    "getCreatorPayment(address)": FunctionFragment;
     "getCreatorSubscribers(address)": FunctionFragment;
     "getCreatorSubscriptionPlans(address)": FunctionFragment;
     "getSupporterCreatorSubscription(address,address)": FunctionFragment;
@@ -60,7 +60,7 @@ interface BackerInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "getBalance", values: [string]): string;
   encodeFunctionData(
     functionFragment: "getCreatorPayment",
-    values?: undefined
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getCreatorSubscribers",
@@ -258,7 +258,10 @@ export class Backer extends BaseContract {
 
     getBalance(user: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getCreatorPayment(overrides?: CallOverrides): Promise<[BigNumber]>;
+    getCreatorPayment(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getCreatorSubscribers(
       creator: string,
@@ -392,7 +395,10 @@ export class Backer extends BaseContract {
 
   getBalance(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  getCreatorPayment(overrides?: CallOverrides): Promise<BigNumber>;
+  getCreatorPayment(
+    creator: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getCreatorSubscribers(
     creator: string,
@@ -511,7 +517,10 @@ export class Backer extends BaseContract {
 
     getBalance(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getCreatorPayment(overrides?: CallOverrides): Promise<BigNumber>;
+    getCreatorPayment(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getCreatorSubscribers(
       creator: string,
@@ -737,7 +746,10 @@ export class Backer extends BaseContract {
 
     getBalance(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getCreatorPayment(overrides?: CallOverrides): Promise<BigNumber>;
+    getCreatorPayment(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getCreatorSubscribers(
       creator: string,
@@ -814,7 +826,10 @@ export class Backer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getCreatorPayment(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getCreatorPayment(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getCreatorSubscribers(
       creator: string,

@@ -109,7 +109,7 @@ describe("Backer", function () {
     await ethers.provider.send("evm_increaseTime", [2 * period]);
     await ethers.provider.send("evm_mine", []);
 
-    let creatorPayment = await backer.connect(creator).getCreatorPayment();
+    let creatorPayment = await backer.getCreatorPayment(creator.address);
     expect(creatorPayment).to.eq(ethers.utils.parseEther("2.0"));
 
     tx = await backer.connect(creator).claimCreatorPayment();
@@ -118,7 +118,7 @@ describe("Backer", function () {
     await ethers.provider.send("evm_increaseTime", [10 * period]);
     await ethers.provider.send("evm_mine", []);
 
-    creatorPayment = await backer.connect(creator).getCreatorPayment();
+    creatorPayment = await backer.getCreatorPayment(creator.address);
     expect(creatorPayment).to.eq(ethers.utils.parseEther("8.0"));
 
     // subscribeing to the same plan after the subscription is over
