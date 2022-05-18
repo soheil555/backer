@@ -36,8 +36,6 @@ const Subscribers: Page = () => {
   const [subscribers, setSubscribers] = useState<Subscriber[]>();
   const { data: creatorPayment } = useCreatorPayment(address);
 
-  console.log("creatorPayment", creatorPayment);
-
   useEffect(() => {
     if (backer && web3Provider && address) {
       (async () => {

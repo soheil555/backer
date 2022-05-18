@@ -1,6 +1,6 @@
 import { IconType } from "react-icons";
 import { MdHome, MdPeopleAlt } from "react-icons/md";
-import { FaHandshake, FaDatabase } from "react-icons/fa";
+import { FaHandshake, FaDatabase, FaRegListAlt } from "react-icons/fa";
 
 export interface Route {
   name: string;
@@ -24,6 +24,11 @@ export const dashboardRoutes: Route[] = [
         path: "/dashboard/supporter/support",
         name: "Support",
         icon: FaHandshake,
+      },
+      {
+        path: "/dashboard/supporter/subscriptions",
+        name: "Subscriptions",
+        icon: FaRegListAlt,
       },
     ],
   },
