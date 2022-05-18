@@ -5,8 +5,10 @@ import { FaDatabase } from "react-icons/fa";
 
 export interface Route {
   name: string;
-  path: string;
-  icon: IconType;
+  path?: string;
+  category?: string;
+  icon?: IconType;
+  views?: Route[];
 }
 
 export const dashboardRoutes: Route[] = [
@@ -16,13 +18,25 @@ export const dashboardRoutes: Route[] = [
     icon: MdHome,
   },
   {
-    path: "/dashboard/support",
-    name: "Support",
-    icon: FaHandshake,
+    name: "SUPPORTER PAGES",
+    category: "supporter",
+    views: [
+      {
+        path: "/dashboard/supporter/support",
+        name: "Support",
+        icon: FaHandshake,
+      },
+    ],
   },
   {
-    path: "/dashboard/subscription-plans",
-    name: "Subscription Plans",
-    icon: FaDatabase,
+    name: "CREATOR PAGES",
+    category: "creator",
+    views: [
+      {
+        path: "/dashboard/creator/subscription-plans",
+        name: "Subscription Plans",
+        icon: FaDatabase,
+      },
+    ],
   },
 ];

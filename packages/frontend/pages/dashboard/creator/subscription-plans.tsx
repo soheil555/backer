@@ -1,10 +1,10 @@
-import DashboardLayout from "../../layouts/Dashboard";
+import DashboardLayout from "../../../layouts/Dashboard";
 import { Box, Container, Heading } from "@chakra-ui/react";
-import useAppSelector from "../../hooks/useAppSelector";
+import useAppSelector from "../../../hooks/useAppSelector";
 import { PlusSquareIcon } from "@chakra-ui/icons";
-import AddSubscriptionPlanButton from "../../components/CustomButtons/AddSubscriptionPlanButton";
-import SubscriptionPlansComponent from "../../components/User/Creator/SubscriptionPlans";
-import { Page } from "../../types/page";
+import AddSubscriptionPlanButton from "../../../components/CustomButtons/AddSubscriptionPlanButton";
+import SubscriptionPlansComponent from "../../../components/User/Creator/SubscriptionPlans";
+import { Page } from "../../../types/page";
 import { ReactElement } from "react";
 
 const SubscriptionPlans: Page = () => {

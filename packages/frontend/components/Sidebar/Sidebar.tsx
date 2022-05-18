@@ -12,6 +12,7 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerFooter,
+  Heading,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import type { Route } from "../../routes";
@@ -22,8 +23,19 @@ type SidebarProps = {
 
 const createLinks = (routes: Route[]) => {
   return routes.map((route) => {
+    if (route.category) {
+      return (
+        <Box display="flex" flexDirection="column">
+          <Heading fontWeight="light" fontSize={24} mb={4}>
+            {route.name}
+          </Heading>
+          {createLinks(route.views!)}
+        </Box>
+      );
+    }
+
     return (
-      <NextLink href={route.path} passHref>
+      <NextLink href={route.path!} passHref>
         <Link
           bg="whiteAlpha.900"
           fontSize={25}

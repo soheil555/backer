@@ -1,4 +1,4 @@
-import DashboardLayout from "../../layouts/Dashboard";
+import DashboardLayout from "../../../layouts/Dashboard";
 import { utils } from "ethers";
 import {
   Input,
@@ -13,10 +13,9 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import Resolution from "@unstoppabledomains/resolution";
 import { useState, ReactElement } from "react";
-import { Page } from "../../types/page";
-import SubscriptionPlans from "../../components/User/Creator/SubscriptionPlans";
-import SendTip from "../../components/User/Supporter/SendTip";
-import UnsubscribeButton from "../../components/CustomButtons/UnsubscribeButton";
+import { Page } from "../../../types/page";
+import SubscriptionPlans from "../../../components/User/Creator/SubscriptionPlans";
+import SendTip from "../../../components/User/Supporter/SendTip";
 
 const resolution = new Resolution();
 
