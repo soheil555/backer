@@ -28,10 +28,12 @@ export default function SubscriptionPlan({
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      gap={2}
+      gap={4}
       minHeight="250px"
       p={4}
     >
+      <Heading fontSize={24}>#{id.toString()}</Heading>
+
       <Heading fontSize={28}>{name}</Heading>
       <Text>
         {parseBalance(amountPerPeriod)} Matic / {parsePeriod()}

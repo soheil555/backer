@@ -21,6 +21,7 @@ import {
   Button,
   Tooltip,
   useToast,
+  IconButton,
 } from "@chakra-ui/react";
 import useBackerContract from "../../../hooks/useBackerContract";
 import useAppSelector from "../../../hooks/useAppSelector";
@@ -28,6 +29,7 @@ import { Subscriber } from "../../../types/subscriber";
 import Card from "../../../components/Card/Card";
 import useCreatorPayment from "../../../hooks/useCreatorPayment";
 import { parseBalance } from "../../../utils";
+import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 const Subscribers: Page = () => {
   const toast = useToast();
@@ -102,10 +104,14 @@ const Subscribers: Page = () => {
               </StatNumber>
             </Stat>
 
-            <Tooltip
-              hasArrow
-              label="move entire payment to your account balance"
-            >
+            <Box display="flex" alignItems="center" gap={2}>
+              <Tooltip
+                hasArrow
+                label="move entire payment to your account balance"
+              >
+                <InfoOutlineIcon />
+              </Tooltip>
+
               <Button
                 onClick={handleClaim}
                 colorScheme="purple"
@@ -114,7 +120,7 @@ const Subscribers: Page = () => {
               >
                 Claim
               </Button>
-            </Tooltip>
+            </Box>
           </Card>
         </GridItem>
       </Grid>
