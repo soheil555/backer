@@ -36,6 +36,8 @@ interface BackerInterface extends ethers.utils.Interface {
     "getSupporterSubscriptions(address)": FunctionFragment;
     "newSubscriptionPlan(uint256,string)": FunctionFragment;
     "period()": FunctionFragment;
+    "removeExpiredSubscribers(address)": FunctionFragment;
+    "removeExpiredSubscriptions(address)": FunctionFragment;
     "sendTip(address,uint256)": FunctionFragment;
     "subscribe(address,uint256,uint256)": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
@@ -88,6 +90,14 @@ interface BackerInterface extends ethers.utils.Interface {
     values: [BigNumberish, string]
   ): string;
   encodeFunctionData(functionFragment: "period", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "removeExpiredSubscribers",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "removeExpiredSubscriptions",
+    values: [string]
+  ): string;
   encodeFunctionData(
     functionFragment: "sendTip",
     values: [string, BigNumberish]
@@ -148,6 +158,14 @@ interface BackerInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "period", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "removeExpiredSubscribers",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "removeExpiredSubscriptions",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "sendTip", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "subscribe", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
@@ -367,6 +385,16 @@ export class Backer extends BaseContract {
 
     period(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    removeExpiredSubscribers(
+      creator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    removeExpiredSubscriptions(
+      supporter: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     sendTip(
       creator: string,
       amount: BigNumberish,
@@ -501,6 +529,16 @@ export class Backer extends BaseContract {
 
   period(overrides?: CallOverrides): Promise<BigNumber>;
 
+  removeExpiredSubscribers(
+    creator: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  removeExpiredSubscriptions(
+    supporter: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   sendTip(
     creator: string,
     amount: BigNumberish,
@@ -627,6 +665,16 @@ export class Backer extends BaseContract {
     ): Promise<void>;
 
     period(overrides?: CallOverrides): Promise<BigNumber>;
+
+    removeExpiredSubscribers(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    removeExpiredSubscriptions(
+      supporter: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     sendTip(
       creator: string,
@@ -809,6 +857,16 @@ export class Backer extends BaseContract {
 
     period(overrides?: CallOverrides): Promise<BigNumber>;
 
+    removeExpiredSubscribers(
+      creator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    removeExpiredSubscriptions(
+      supporter: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     sendTip(
       creator: string,
       amount: BigNumberish,
@@ -893,6 +951,16 @@ export class Backer extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     period(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    removeExpiredSubscribers(
+      creator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    removeExpiredSubscriptions(
+      supporter: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     sendTip(
       creator: string,

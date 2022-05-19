@@ -14,6 +14,8 @@ import {
   StatNumber,
   Grid,
   GridItem,
+  Button,
+  useToast,
 } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import DashboardLayout from "../../../layouts/Dashboard";
@@ -23,10 +25,40 @@ import useAppSelector from "../../../hooks/useAppSelector";
 import { parseBalance } from "../../../utils";
 import UnsubscribeButton from "../../../components/CustomButtons/UnsubscribeButton";
 import useSubscriptions from "../../../hooks/useSubscriptions";
+import useBackerContract from "../../../hooks/useBackerContract";
 
 const Subscriptions: Page = () => {
+  const toast = useToast();
   const { address } = useAppSelector((state) => state.web3);
+  const backer = useBackerContract();
   const { data: subscriptions } = useSubscriptions(address);
+
+  const handleRemoveExpiredSubscriptions = () => {
+    if (backer && address) {
+      (async () => {
+        try {
+          await backer.removeExpiredSubscriptions(address);
+          toast({
+            title: "Remove Expired subscriptions",
+            description:
+              "removed successfully. please wait for tx confirmation",
+            status: "success",
+            isClosable: true,
+            duration: 5000,
+          });
+        } catch (error) {
+          console.error(error);
+          toast({
+            title: "Remove Expired subscriptions",
+            description: "failed to remove",
+            status: "error",
+            isClosable: true,
+            duration: 5000,
+          });
+        }
+      })();
+    }
+  };
 
   return (
     <Container
@@ -38,13 +70,21 @@ const Subscriptions: Page = () => {
     >
       <Heading fontWeight="light">Your subscriptions</Heading>
 
-      <Grid w="100%" templateColumns="repeat(3,1fr)" gap={4} mb={2}>
-        <GridItem colSpan={{ sm: 3, lg: 1 }}>
+      <Grid w="100%" templateColumns="repeat(1,1fr)" gap={4} mb={2}>
+        <GridItem colSpan={{ sm: 1 }}>
           <Card alignItems="center" minH="90px">
             <Stat>
               <StatLabel>Number of subscriptions</StatLabel>
               <StatNumber>{subscriptions?.length}</StatNumber>
             </Stat>
+
+            <Button
+              onClick={handleRemoveExpiredSubscriptions}
+              colorScheme="purple"
+              variant="outline"
+            >
+              Remove expired subscriptions
+            </Button>
           </Card>
         </GridItem>
       </Grid>

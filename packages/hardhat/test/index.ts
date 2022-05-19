@@ -4,7 +4,7 @@ import { Backer } from "../typechain";
 
 describe("Backer", function () {
   let backer: Backer;
-  const period = 100; // each period is 5s
+  const period = 100; // each period is 100s
 
   this.beforeEach(async function () {
     const Backer = await ethers.getContractFactory("Backer");
@@ -250,5 +250,58 @@ describe("Backer", function () {
 
     let creatorPayment = await backer.getCreatorPayment(creator.address);
     expect(creatorPayment).to.eq(ethers.utils.parseEther("2.0"));
+  });
+
+  it("should remove expired subscriptions and subscribers", async function () {
+    const [_, creator, supporter] = await ethers.getSigners();
+
+    let tx = await backer
+      .connect(creator)
+      .newSubscriptionPlan(ethers.utils.parseEther("2.0"), "gold plan");
+    await tx.wait();
+
+    tx = await backer
+      .connect(creator)
+      .newSubscriptionPlan(ethers.utils.parseEther("1.0"), "silver plan");
+    await tx.wait();
+
+    tx = await backer
+      .connect(supporter)
+      .deposit({ value: ethers.utils.parseEther("100") });
+    await tx.wait();
+
+    // subscribeing to a plan
+    tx = await backer.connect(supporter).subscribe(creator.address, 1, 10);
+    await tx.wait();
+
+    let subscribers = await backer.getCreatorSubscribers(creator.address);
+    expect(subscribers).to.length(1);
+
+    await ethers.provider.send("evm_increaseTime", [12 * period]);
+    await ethers.provider.send("evm_mine", []);
+
+    tx = await backer.removeExpiredSubscribers(creator.address);
+    await tx.wait();
+
+    subscribers = await backer.getCreatorSubscribers(creator.address);
+    expect(subscribers).to.length(0);
+
+    // subscribeing to the same plan
+    tx = await backer.connect(supporter).subscribe(creator.address, 1, 10);
+    await tx.wait();
+
+    let subscriptions = await backer.getSupporterSubscriptions(
+      supporter.address
+    );
+    expect(subscriptions).to.length(1);
+
+    await ethers.provider.send("evm_increaseTime", [12 * period]);
+    await ethers.provider.send("evm_mine", []);
+
+    tx = await backer.removeExpiredSubscriptions(supporter.address);
+    await tx.wait();
+
+    subscriptions = await backer.getSupporterSubscriptions(supporter.address);
+    expect(subscriptions).to.length(0);
   });
 });

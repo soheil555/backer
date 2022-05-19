@@ -478,6 +478,32 @@
         "internalType": "address",
         "name": "creator",
         "type": "address"
+      }
+    ],
+    "name": "removeExpiredSubscribers",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "supporter",
+        "type": "address"
+      }
+    ],
+    "name": "removeExpiredSubscriptions",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
       },
       {
         "internalType": "uint256",

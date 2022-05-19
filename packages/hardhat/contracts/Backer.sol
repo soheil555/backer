@@ -166,6 +166,27 @@ contract Backer is ReEntrancyGuard {
         return supporterSubscriptions[supporter];
     }
 
+    function removeExpiredSubscriptions(address supporter) external {
+        Subscription[] memory subscriptions = supporterSubscriptions[supporter];
+
+        for(uint256 i=0; i<subscriptions.length; i++){
+            if(subscriptions[i].afterLastPeriod <= currentPeriod()){
+                _cancelSubscribe(supporter, subscriptions[i].subscriptionPlan.creator, true);
+            }
+        }
+    }
+
+    function removeExpiredSubscribers(address creator) external {
+        Subscriber[] memory subscribers = creatorSubscribers[creator];
+
+        for(uint256 i=0; i< subscribers.length; i++){
+            if(subscribers[i].afterLastPeriod <= currentPeriod()){
+                _cancelSubscribe(subscribers[i].supporter, creator, true);
+            }
+        }
+    }
+
+
     function canSubscribe(uint256 amountPerPeriod, uint256 numOfPeriods)
         public
         view

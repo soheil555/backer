@@ -37,6 +37,33 @@ const Subscribers: Page = () => {
   const { data: creatorPayment } = useCreatorPayment(address);
   const { data: subscribers } = useSubscribers(address);
 
+  const handleRemoveExpiredSubscribers = () => {
+    if (backer && web3Provider && address) {
+      (async () => {
+        try {
+          await backer.removeExpiredSubscribers(address);
+          toast({
+            title: "Remove Expired subscribers",
+            description:
+              "removed successfully. please wait for tx confirmation",
+            status: "success",
+            isClosable: true,
+            duration: 5000,
+          });
+        } catch (error) {
+          console.error(error);
+          toast({
+            title: "Remove Expired subscribers",
+            description: "failed to remove",
+            status: "error",
+            isClosable: true,
+            duration: 5000,
+          });
+        }
+      })();
+    }
+  };
+
   const handleClaim = async () => {
     if (backer && web3Provider && address) {
       try {
@@ -75,17 +102,31 @@ const Subscribers: Page = () => {
     >
       <Heading fontWeight="light">Subscribers</Heading>
 
-      <Grid w="100%" templateColumns="repeat(3,1fr)" gap={4} mb={2}>
-        <GridItem colSpan={{ sm: 3, lg: 1 }}>
-          <Card alignItems="center" minH="90px">
-            <Stat>
+      <Grid w="100%" templateColumns="repeat(4,1fr)" gap={4} mb={2}>
+        <GridItem colSpan={{ sm: 4, lg: 2 }}>
+          <Card
+            flexWrap="wrap"
+            gap={2}
+            alignItems="center"
+            justifyContent="center"
+            minH="90px"
+          >
+            <Stat minW="40%">
               <StatLabel>Number of subscribers</StatLabel>
               <StatNumber>{subscribers?.length}</StatNumber>
             </Stat>
+
+            <Button
+              onClick={handleRemoveExpiredSubscribers}
+              colorScheme="purple"
+              variant="outline"
+            >
+              Remove expired subscribers
+            </Button>
           </Card>
         </GridItem>
 
-        <GridItem colSpan={{ sm: 3, lg: 2 }}>
+        <GridItem colSpan={{ sm: 4, lg: 2 }}>
           <Card alignItems="center" minH="90px">
             <Stat>
               <StatLabel>Creator Payment</StatLabel>

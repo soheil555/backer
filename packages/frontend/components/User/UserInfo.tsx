@@ -44,7 +44,7 @@ export default function UserInfo() {
           cursor="pointer"
         >
           <Tooltip hasArrow label="copy to clipboard">
-            {address}
+            {address ?? ""}
           </Tooltip>
         </Text>
       </Box>
