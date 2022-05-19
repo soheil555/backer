@@ -26,6 +26,7 @@ interface BackerInterface extends ethers.utils.Interface {
     "cancelSubscribe(address)": FunctionFragment;
     "claimCreatorPayment()": FunctionFragment;
     "currentPeriod()": FunctionFragment;
+    "deleteSubscriptionPlan(uint256)": FunctionFragment;
     "deposit()": FunctionFragment;
     "getBalance(address)": FunctionFragment;
     "getCreatorPayment(address)": FunctionFragment;
@@ -55,6 +56,10 @@ interface BackerInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "currentPeriod",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "deleteSubscriptionPlan",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
   encodeFunctionData(functionFragment: "getBalance", values: [string]): string;
@@ -110,6 +115,10 @@ interface BackerInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "currentPeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "deleteSubscriptionPlan",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
@@ -252,6 +261,11 @@ export class Backer extends BaseContract {
 
     currentPeriod(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    deleteSubscriptionPlan(
+      subscriptionPlanId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     deposit(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -389,6 +403,11 @@ export class Backer extends BaseContract {
 
   currentPeriod(overrides?: CallOverrides): Promise<BigNumber>;
 
+  deleteSubscriptionPlan(
+    subscriptionPlanId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   deposit(
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -512,6 +531,11 @@ export class Backer extends BaseContract {
     claimCreatorPayment(overrides?: CallOverrides): Promise<void>;
 
     currentPeriod(overrides?: CallOverrides): Promise<BigNumber>;
+
+    deleteSubscriptionPlan(
+      subscriptionPlanId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     deposit(overrides?: CallOverrides): Promise<void>;
 
@@ -740,6 +764,11 @@ export class Backer extends BaseContract {
 
     currentPeriod(overrides?: CallOverrides): Promise<BigNumber>;
 
+    deleteSubscriptionPlan(
+      subscriptionPlanId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     deposit(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -816,6 +845,11 @@ export class Backer extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     currentPeriod(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    deleteSubscriptionPlan(
+      subscriptionPlanId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     deposit(
       overrides?: PayableOverrides & { from?: string | Promise<string> }

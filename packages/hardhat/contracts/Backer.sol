@@ -269,20 +269,41 @@ contract Backer is ReEntrancyGuard {
     }
 
     function cancelSubscribe(address creator) external {
+        _cancelSubscribe(msg.sender, creator, true);
+    }
+
+    function _cancelSubscribe(address supporter, address creator,bool countCurrentPeriod) internal {
+
         Subscription memory subscription = supporterCreatorSubscription[
-            msg.sender
+            supporter
         ][creator];
         require(subscription.initialized);
 
         //you can not get back current period money
         if(subscription.afterLastPeriod > currentPeriod()){
-            balances[msg.sender] +=
+            uint256 numOfPeriod;
+
+            if(countCurrentPeriod){
+                    numOfPeriod = subscription.afterLastPeriod - currentPeriod() - 1;
+            } else {
+                numOfPeriod = subscription.afterLastPeriod - currentPeriod();
+            }
+
+            balances[supporter] +=
                 subscription.subscriptionPlan.amountPerPeriod *
-                (subscription.afterLastPeriod - currentPeriod() - 1);
+                (numOfPeriod);
+        }
+
+
+        uint256 startPeriodNum;
+        if(countCurrentPeriod){
+            startPeriodNum = currentPeriod() + 1;
+        } else{
+            startPeriodNum = currentPeriod();
         }
   
         for (
-            uint256 periodNum = currentPeriod() + 1;
+            uint256 periodNum = startPeriodNum;
             periodNum < subscription.afterLastPeriod;
             periodNum++
         ) {
@@ -291,23 +312,23 @@ contract Backer is ReEntrancyGuard {
                 .amountPerPeriod;
         }
 
-        uint256 subscriptionsLen = supporterSubscriptions[msg.sender].length;
+        uint256 subscriptionsLen = supporterSubscriptions[supporter].length;
         for (uint256 i = 0; i < subscriptionsLen; i++) {
             if (
-                supporterSubscriptions[msg.sender][i].subscriptionPlan.id ==
+                supporterSubscriptions[supporter][i].subscriptionPlan.id ==
                 subscription.subscriptionPlan.id
             ) {
-                supporterSubscriptions[msg.sender][i] = supporterSubscriptions[
-                    msg.sender
+                supporterSubscriptions[supporter][i] = supporterSubscriptions[
+                    supporter
                 ][subscriptionsLen - 1];
-                supporterSubscriptions[msg.sender].pop();
+                supporterSubscriptions[supporter].pop();
                 break;
             }
         }
 
         uint256 creatorSubscribersLen = creatorSubscribers[creator].length;
         for (uint256 i = 0; i < creatorSubscribersLen; i++) {
-            if (creatorSubscribers[creator][i].supporter == msg.sender) {
+            if (creatorSubscribers[creator][i].supporter == supporter) {
                 creatorSubscribers[creator][i] = creatorSubscribers[creator][
                     creatorSubscribersLen - 1
                 ];
@@ -316,12 +337,39 @@ contract Backer is ReEntrancyGuard {
             }
         }
 
-        delete supporterCreatorSubscription[msg.sender][creator];
+        delete supporterCreatorSubscription[supporter][creator];
         emit SubscribeCancelled(
             period,
-            msg.sender,
+            supporter,
             creator,
             subscription.subscriptionPlan.id
         );
+
     }
+
+    function deleteSubscriptionPlan(uint256 subscriptionPlanId) external {
+
+        bool planFound;
+
+        uint256 i;
+        uint256 plansLen = creatorSubscriptionPlans[msg.sender].length;
+        for(i=0;i< plansLen;i++){
+            if(creatorSubscriptionPlans[msg.sender][i].id == subscriptionPlanId) {
+                    planFound = true;
+                    break;
+            }
+        }
+        require(planFound,"you have no subscription plan with this id");
+        creatorSubscriptionPlans[msg.sender][i] = creatorSubscriptionPlans[msg.sender][plansLen-1];
+        creatorSubscriptionPlans[msg.sender].pop();
+
+
+        for(i=0;i< creatorSubscribers[msg.sender].length;i++){
+            if(creatorSubscribers[msg.sender][i].subscriptionPlanId == subscriptionPlanId){
+                _cancelSubscribe(creatorSubscribers[msg.sender][i].supporter, msg.sender,false);
+            }
+        }
+
+    }
+
 }

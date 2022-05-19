@@ -3,6 +3,7 @@ import { BigNumber } from "ethers";
 import useAppSelector from "../../../hooks/useAppSelector";
 import { SubscriptionPlan as SubscriptionPlanType } from "../../../types/subscription-plan";
 import { parseBalance, parsePeriod } from "../../../utils";
+import DeleteSubscriptionPlanButton from "../../CustomButtons/DeleteSubscriptionPlanButton";
 import SubscribeButton from "../../CustomButtons/SubscribeButton";
 import UnsubscribeButton from "../../CustomButtons/UnsubscribeButton";
 
@@ -41,7 +42,10 @@ export default function SubscriptionPlan({
 
       <ButtonGroup variant="outline" spacing={6}>
         {isCreator ? (
-          <Button colorScheme="red">Delete</Button>
+          <DeleteSubscriptionPlanButton
+            subscriptionPlanId={id}
+            colorScheme="red"
+          />
         ) : (
           !currentPlanId && (
             <SubscribeButton

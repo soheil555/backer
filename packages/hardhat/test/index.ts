@@ -187,4 +187,68 @@ describe("Backer", function () {
         .sendTip(creator.address, ethers.utils.parseEther("100"))
     ).to.be.revertedWith("not enough fund");
   });
+
+  it("should delete a subscription plan", async function () {
+    const [_, creator, supporter] = await ethers.getSigners();
+
+    let tx = await backer
+      .connect(creator)
+      .newSubscriptionPlan(ethers.utils.parseEther("1.0"), "gold plan");
+    await tx.wait();
+
+    let creatorSubscriptionPlans = await backer.getCreatorSubscriptionPlans(
+      creator.address
+    );
+    expect(creatorSubscriptionPlans.length).to.eq(1);
+
+    tx = await backer
+      .connect(supporter)
+      .deposit({ value: ethers.utils.parseEther("100") });
+    await tx.wait();
+
+    // subscribeing to a plan
+    tx = await backer.connect(supporter).subscribe(creator.address, 1, 10);
+    await tx.wait();
+
+    expect(await backer.getBalance(supporter.address)).to.eq(
+      ethers.utils.parseEther("90")
+    );
+
+    let subscribers = await backer.getCreatorSubscribers(creator.address);
+    expect(subscribers).to.length(1);
+
+    let subscriptions = await backer.getSupporterSubscriptions(
+      supporter.address
+    );
+    expect(subscriptions).to.length(1);
+
+    await ethers.provider.send("evm_increaseTime", [2 * period]);
+    await ethers.provider.send("evm_mine", []);
+
+    // delete subscription plan
+    await backer
+      .connect(creator)
+      .deleteSubscriptionPlan(creatorSubscriptionPlans[0].id);
+
+    creatorSubscriptionPlans = await backer.getCreatorSubscriptionPlans(
+      creator.address
+    );
+    expect(creatorSubscriptionPlans.length).to.eq(0);
+
+    subscribers = await backer.getCreatorSubscribers(creator.address);
+    expect(subscribers).to.length(0);
+
+    subscriptions = await backer.getSupporterSubscriptions(supporter.address);
+    expect(subscriptions).to.length(0);
+
+    expect(await backer.getBalance(supporter.address)).to.eq(
+      ethers.utils.parseEther("98")
+    );
+
+    await ethers.provider.send("evm_increaseTime", [2 * period]);
+    await ethers.provider.send("evm_mine", []);
+
+    let creatorPayment = await backer.getCreatorPayment(creator.address);
+    expect(creatorPayment).to.eq(ethers.utils.parseEther("2.0"));
+  });
 });
