@@ -19,26 +19,14 @@ import { ReactElement } from "react";
 import DashboardLayout from "../../../layouts/Dashboard";
 import { Page } from "../../../types/page";
 import Card from "../../../components/Card/Card";
-import { useState, useEffect } from "react";
-import useBackerContract from "../../../hooks/useBackerContract";
 import useAppSelector from "../../../hooks/useAppSelector";
-import { Subscription } from "../../../types/subscription";
 import { parseBalance } from "../../../utils";
 import UnsubscribeButton from "../../../components/CustomButtons/UnsubscribeButton";
+import useSubscriptions from "../../../hooks/useSubscriptions";
 
 const Subscriptions: Page = () => {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>();
-  const backer = useBackerContract();
-  const { web3Provider, address } = useAppSelector((state) => state.web3);
-
-  useEffect(() => {
-    if (backer && web3Provider && address) {
-      (async () => {
-        const subscriptions = await backer.getSupporterSubscriptions(address);
-        setSubscriptions(subscriptions);
-      })();
-    }
-  }, [backer, web3Provider, address]);
+  const { address } = useAppSelector((state) => state.web3);
+  const { data: subscriptions } = useSubscriptions(address);
 
   return (
     <Container

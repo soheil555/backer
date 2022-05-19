@@ -1,5 +1,5 @@
 import { Page } from "../../../types/page";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement } from "react";
 import DashboardLayout from "../../../layouts/Dashboard";
 import {
   Box,
@@ -21,31 +21,21 @@ import {
   Button,
   Tooltip,
   useToast,
-  IconButton,
 } from "@chakra-ui/react";
 import useBackerContract from "../../../hooks/useBackerContract";
 import useAppSelector from "../../../hooks/useAppSelector";
-import { Subscriber } from "../../../types/subscriber";
 import Card from "../../../components/Card/Card";
 import useCreatorPayment from "../../../hooks/useCreatorPayment";
 import { parseBalance } from "../../../utils";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
+import useSubscribers from "../../../hooks/useSubscribers";
 
 const Subscribers: Page = () => {
   const toast = useToast();
   const backer = useBackerContract();
   const { web3Provider, address } = useAppSelector((state) => state.web3);
-  const [subscribers, setSubscribers] = useState<Subscriber[]>();
   const { data: creatorPayment } = useCreatorPayment(address);
-
-  useEffect(() => {
-    if (backer && web3Provider && address) {
-      (async () => {
-        const subscribers = await backer.getCreatorSubscribers(address);
-        setSubscribers(subscribers);
-      })();
-    }
-  }, [backer, web3Provider, address]);
+  const { data: subscribers } = useSubscribers(address);
 
   const handleClaim = async () => {
     if (backer && web3Provider && address) {
