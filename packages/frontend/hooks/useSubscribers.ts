@@ -1,4 +1,4 @@
-import useSWR, { Fetcher } from "swr";
+import useSWR from "swr";
 import { Backer } from "../contracts/backer/Backer";
 import { Subscriber } from "../types/subscriber";
 import useBackerContract from "./useBackerContract";

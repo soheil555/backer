@@ -300,9 +300,23 @@ export class Backer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<
       [
-        ([string, BigNumber, BigNumber] & {
+        ([
+          string,
+          [BigNumber, string, string, BigNumber] & {
+            id: BigNumber;
+            name: string;
+            creator: string;
+            amountPerPeriod: BigNumber;
+          },
+          BigNumber
+        ] & {
           supporter: string;
-          subscriptionPlanId: BigNumber;
+          subscriptionPlan: [BigNumber, string, string, BigNumber] & {
+            id: BigNumber;
+            name: string;
+            creator: string;
+            amountPerPeriod: BigNumber;
+          };
           afterLastPeriod: BigNumber;
         })[]
       ]
@@ -451,9 +465,23 @@ export class Backer extends BaseContract {
     creator: string,
     overrides?: CallOverrides
   ): Promise<
-    ([string, BigNumber, BigNumber] & {
+    ([
+      string,
+      [BigNumber, string, string, BigNumber] & {
+        id: BigNumber;
+        name: string;
+        creator: string;
+        amountPerPeriod: BigNumber;
+      },
+      BigNumber
+    ] & {
       supporter: string;
-      subscriptionPlanId: BigNumber;
+      subscriptionPlan: [BigNumber, string, string, BigNumber] & {
+        id: BigNumber;
+        name: string;
+        creator: string;
+        amountPerPeriod: BigNumber;
+      };
       afterLastPeriod: BigNumber;
     })[]
   >;
@@ -588,9 +616,23 @@ export class Backer extends BaseContract {
       creator: string,
       overrides?: CallOverrides
     ): Promise<
-      ([string, BigNumber, BigNumber] & {
+      ([
+        string,
+        [BigNumber, string, string, BigNumber] & {
+          id: BigNumber;
+          name: string;
+          creator: string;
+          amountPerPeriod: BigNumber;
+        },
+        BigNumber
+      ] & {
         supporter: string;
-        subscriptionPlanId: BigNumber;
+        subscriptionPlan: [BigNumber, string, string, BigNumber] & {
+          id: BigNumber;
+          name: string;
+          creator: string;
+          amountPerPeriod: BigNumber;
+        };
         afterLastPeriod: BigNumber;
       })[]
     >;

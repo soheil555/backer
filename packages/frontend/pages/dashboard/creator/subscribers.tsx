@@ -175,7 +175,7 @@ const Subscribers: Page = () => {
                       <VStack align="stretch" spacing={2}>
                         <Text>
                           Subscription plan id:{" "}
-                          {subscriber.subscriptionPlanId.toString()}
+                          {subscriber.subscriptionPlan.id.toString()}
                         </Text>
 
                         <Text>
