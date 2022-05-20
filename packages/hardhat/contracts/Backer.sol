@@ -40,7 +40,7 @@ contract Backer is ReEntrancyGuard {
 
     struct Subscriber {
         address supporter;
-        uint256 subscriptionPlanId;
+        SubscriptionPlan subscriptionPlan;
         uint256 afterLastPeriod;
     }
 
@@ -64,8 +64,11 @@ contract Backer is ReEntrancyGuard {
 
     // creator => (period => payment)
     mapping(address => mapping(uint256 => uint256)) creatorPayments;
-    mapping(address => uint256) creatorAfterLastClaimsPeriod;
 
+    // creator => period after the last period that the creator claimed for her/his payment
+    mapping(address => uint256) creatorAfterLastClaimPeriod;
+
+    // address => balance
     mapping(address => uint256) balances;
 
     constructor(uint256 _period) {
@@ -84,7 +87,7 @@ contract Backer is ReEntrancyGuard {
     function getCreatorPayment(address creator) public view returns (uint256) {
         uint256 amount = 0;
         for (
-            uint256 periodNum = creatorAfterLastClaimsPeriod[creator];
+            uint256 periodNum = creatorAfterLastClaimPeriod[creator];
             periodNum < currentPeriod();
             periodNum++
         ) {
@@ -114,7 +117,7 @@ contract Backer is ReEntrancyGuard {
 
     function claimCreatorPayment() external {
         uint256 amount = getCreatorPayment(msg.sender);
-        creatorAfterLastClaimsPeriod[msg.sender] = currentPeriod();
+        creatorAfterLastClaimPeriod[msg.sender] = currentPeriod();
         balances[msg.sender] += amount;
     }
 
@@ -169,9 +172,13 @@ contract Backer is ReEntrancyGuard {
     function removeExpiredSubscriptions(address supporter) external {
         Subscription[] memory subscriptions = supporterSubscriptions[supporter];
 
-        for(uint256 i=0; i<subscriptions.length; i++){
-            if(subscriptions[i].afterLastPeriod <= currentPeriod()){
-                _cancelSubscribe(supporter, subscriptions[i].subscriptionPlan.creator, true);
+        for (uint256 i = 0; i < subscriptions.length; i++) {
+            if (subscriptions[i].afterLastPeriod <= currentPeriod()) {
+                _cancelSubscribe(
+                    supporter,
+                    subscriptions[i].subscriptionPlan.creator,
+                    true
+                );
             }
         }
     }
@@ -179,13 +186,12 @@ contract Backer is ReEntrancyGuard {
     function removeExpiredSubscribers(address creator) external {
         Subscriber[] memory subscribers = creatorSubscribers[creator];
 
-        for(uint256 i=0; i< subscribers.length; i++){
-            if(subscribers[i].afterLastPeriod <= currentPeriod()){
+        for (uint256 i = 0; i < subscribers.length; i++) {
+            if (subscribers[i].afterLastPeriod <= currentPeriod()) {
                 _cancelSubscribe(subscribers[i].supporter, creator, true);
             }
         }
     }
-
 
     function canSubscribe(uint256 amountPerPeriod, uint256 numOfPeriods)
         public
@@ -203,6 +209,7 @@ contract Backer is ReEntrancyGuard {
         SubscriptionPlan memory subscriptionPlan;
         bool planFound;
 
+        // check if the creator has a subscription plan with the given id
         uint256 i;
         for (i = 0; i < creatorSubscriptionPlans[creator].length; i++) {
             if (creatorSubscriptionPlans[creator][i].id == subscriptionPlanId) {
@@ -243,36 +250,36 @@ contract Backer is ReEntrancyGuard {
 
         supporterCreatorSubscription[msg.sender][creator] = subscription;
 
-        uint256 subscriptionsLen = supporterSubscriptions[msg.sender].length;
+        Subscription[] storage subscriptions = supporterSubscriptions[
+            msg.sender
+        ];
+        uint256 subscriptionsLen = subscriptions.length;
         for (i = 0; i < subscriptionsLen; i++) {
-            if (
-                supporterSubscriptions[msg.sender][i]
-                    .subscriptionPlan
-                    .creator == creator
-            ) {
-                supporterSubscriptions[msg.sender][i] = subscription;
+            if (subscriptions[i].subscriptionPlan.creator == creator) {
+                subscriptions[i] = subscription;
                 break;
             }
         }
         if (i == subscriptionsLen) {
-            supporterSubscriptions[msg.sender].push(subscription);
+            subscriptions.push(subscription);
         }
 
         Subscriber memory subscriber = Subscriber({
             supporter: msg.sender,
-            subscriptionPlanId: subscriptionPlan.id,
+            subscriptionPlan: subscriptionPlan,
             afterLastPeriod: subscription.afterLastPeriod
         });
 
-        uint256 creatorSubscribersLen = creatorSubscribers[creator].length;
-        for (i = 0; i < creatorSubscribersLen; i++) {
-            if (creatorSubscribers[creator][i].supporter == msg.sender) {
-                creatorSubscribers[creator][i] = subscriber;
+        Subscriber[] storage subscribers = creatorSubscribers[creator];
+        uint256 subscribersLen = subscribers.length;
+        for (i = 0; i < subscribersLen; i++) {
+            if (subscribers[i].supporter == msg.sender) {
+                subscribers[i] = subscriber;
                 break;
             }
         }
-        if (i == creatorSubscribersLen) {
-            creatorSubscribers[creator].push(subscriber);
+        if (i == subscribersLen) {
+            subscribers.push(subscriber);
         }
 
         balances[msg.sender] -= subscriptionPlan.amountPerPeriod * numOfPeriods;
@@ -285,29 +292,35 @@ contract Backer is ReEntrancyGuard {
         );
     }
 
-    function getSupporterCreatorSubscription(address supporter, address creator) external view returns (Subscription memory) {
+    function getSupporterCreatorSubscription(address supporter, address creator)
+        external
+        view
+        returns (Subscription memory)
+    {
         return supporterCreatorSubscription[supporter][creator];
     }
 
     function cancelSubscribe(address creator) external {
+        // the supporter can not get back the current period's pledge money
         _cancelSubscribe(msg.sender, creator, true);
     }
 
-    function _cancelSubscribe(address supporter, address creator,bool countCurrentPeriod) internal {
-
+    function _cancelSubscribe(
+        address supporter,
+        address creator,
+        bool countCurrentPeriod // true -> the current period's pledge money won't get back to the supporter account
+    ) internal {
         Subscription memory subscription = supporterCreatorSubscription[
             supporter
         ][creator];
         require(subscription.initialized);
 
-        //you can not get back current period money
-        if(subscription.afterLastPeriod > currentPeriod()){
-            uint256 numOfPeriod;
+        if (subscription.afterLastPeriod > currentPeriod()) {
+            uint256 numOfPeriod = subscription.afterLastPeriod -
+                currentPeriod();
 
-            if(countCurrentPeriod){
-                    numOfPeriod = subscription.afterLastPeriod - currentPeriod() - 1;
-            } else {
-                numOfPeriod = subscription.afterLastPeriod - currentPeriod();
+            if (countCurrentPeriod) {
+                numOfPeriod -= 1;
             }
 
             balances[supporter] +=
@@ -315,14 +328,11 @@ contract Backer is ReEntrancyGuard {
                 (numOfPeriod);
         }
 
-
-        uint256 startPeriodNum;
-        if(countCurrentPeriod){
-            startPeriodNum = currentPeriod() + 1;
-        } else{
-            startPeriodNum = currentPeriod();
+        uint256 startPeriodNum = currentPeriod();
+        if (countCurrentPeriod) {
+            startPeriodNum += 1;
         }
-  
+
         for (
             uint256 periodNum = startPeriodNum;
             periodNum < subscription.afterLastPeriod;
@@ -333,27 +343,27 @@ contract Backer is ReEntrancyGuard {
                 .amountPerPeriod;
         }
 
-        uint256 subscriptionsLen = supporterSubscriptions[supporter].length;
+        Subscription[] storage subscriptions = supporterSubscriptions[
+            supporter
+        ];
+        uint256 subscriptionsLen = subscriptions.length;
         for (uint256 i = 0; i < subscriptionsLen; i++) {
             if (
-                supporterSubscriptions[supporter][i].subscriptionPlan.id ==
+                subscriptions[i].subscriptionPlan.id ==
                 subscription.subscriptionPlan.id
             ) {
-                supporterSubscriptions[supporter][i] = supporterSubscriptions[
-                    supporter
-                ][subscriptionsLen - 1];
-                supporterSubscriptions[supporter].pop();
+                subscriptions[i] = subscriptions[subscriptionsLen - 1];
+                subscriptions.pop();
                 break;
             }
         }
 
-        uint256 creatorSubscribersLen = creatorSubscribers[creator].length;
-        for (uint256 i = 0; i < creatorSubscribersLen; i++) {
-            if (creatorSubscribers[creator][i].supporter == supporter) {
-                creatorSubscribers[creator][i] = creatorSubscribers[creator][
-                    creatorSubscribersLen - 1
-                ];
-                creatorSubscribers[creator].pop();
+        Subscriber[] storage subscribers = creatorSubscribers[creator];
+        uint256 subscribersLen = subscribers.length;
+        for (uint256 i = 0; i < subscribersLen; i++) {
+            if (subscribers[i].supporter == supporter) {
+                subscribers[i] = subscribers[subscribersLen - 1];
+                subscribers.pop();
                 break;
             }
         }
@@ -365,32 +375,38 @@ contract Backer is ReEntrancyGuard {
             creator,
             subscription.subscriptionPlan.id
         );
-
     }
 
     function deleteSubscriptionPlan(uint256 subscriptionPlanId) external {
-
         bool planFound;
 
         uint256 i;
         uint256 plansLen = creatorSubscriptionPlans[msg.sender].length;
-        for(i=0;i< plansLen;i++){
-            if(creatorSubscriptionPlans[msg.sender][i].id == subscriptionPlanId) {
-                    planFound = true;
-                    break;
+        for (i = 0; i < plansLen; i++) {
+            if (
+                creatorSubscriptionPlans[msg.sender][i].id == subscriptionPlanId
+            ) {
+                planFound = true;
+                break;
             }
         }
-        require(planFound,"you have no subscription plan with this id");
-        creatorSubscriptionPlans[msg.sender][i] = creatorSubscriptionPlans[msg.sender][plansLen-1];
+        require(planFound, "you have no subscription plan with this id");
+        creatorSubscriptionPlans[msg.sender][i] = creatorSubscriptionPlans[
+            msg.sender
+        ][plansLen - 1];
         creatorSubscriptionPlans[msg.sender].pop();
 
-
-        for(i=0;i< creatorSubscribers[msg.sender].length;i++){
-            if(creatorSubscribers[msg.sender][i].subscriptionPlanId == subscriptionPlanId){
-                _cancelSubscribe(creatorSubscribers[msg.sender][i].supporter, msg.sender,false);
+        for (i = 0; i < creatorSubscribers[msg.sender].length; i++) {
+            if (
+                creatorSubscribers[msg.sender][i].subscriptionPlan.id ==
+                subscriptionPlanId
+            ) {
+                _cancelSubscribe(
+                    creatorSubscribers[msg.sender][i].supporter,
+                    msg.sender,
+                    false
+                );
             }
         }
-
     }
-
 }

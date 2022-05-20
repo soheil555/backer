@@ -3,7 +3,6 @@
 pragma solidity ^0.8.0;
 
 contract ReEntrancyGuard {
-
     bool internal locked;
 
     modifier noReentrant() {
@@ -12,5 +11,4 @@ contract ReEntrancyGuard {
         _;
         locked = false;
     }
-
 }

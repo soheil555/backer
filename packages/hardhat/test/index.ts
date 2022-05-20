@@ -98,7 +98,7 @@ describe("Backer", function () {
     let subscribers = await backer.getCreatorSubscribers(creator.address);
     expect(subscribers).to.length(1);
     expect(subscribers[0].supporter).to.eq(supporter.address);
-    expect(subscribers[0].subscriptionPlanId).to.eq(1);
+    expect(subscribers[0].subscriptionPlan.id).to.eq(1);
 
     let subscriptions = await backer.getSupporterSubscriptions(
       supporter.address
