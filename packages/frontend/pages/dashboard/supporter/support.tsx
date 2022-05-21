@@ -26,13 +26,15 @@ const Support: Page = () => {
   const [address, setAddress] = useState<string>("");
 
   const resolveAddress = (input: string, currency: string) => {
+    setIsloading(true);
+
     if (utils.isAddress(input)) {
       setAddress(input);
       setError("");
+      setIsloading(false);
       return;
     }
 
-    setIsloading(true);
     resolution
       .addr(input, currency)
       .then((address) => {
@@ -84,7 +86,7 @@ const Support: Page = () => {
         </Box>
       </Box>
 
-      {!!address.length && (
+      {!!address.length && !isLoading ? (
         <SimpleGrid mt={10} minChildWidth="400px" spacing={10}>
           <SubscriptionPlans creator={address} />
 
@@ -92,7 +94,7 @@ const Support: Page = () => {
             <SendTip address={address} />
           </Box>
         </SimpleGrid>
-      )}
+      ) : null}
     </Box>
   );
 };

@@ -6,7 +6,6 @@ import { parseBalance, parsePeriod } from "../../../utils";
 import DeleteSubscriptionPlanButton from "../../CustomButtons/DeleteSubscriptionPlanButton";
 import SubscribeButton from "../../CustomButtons/SubscribeButton";
 import UnsubscribeButton from "../../CustomButtons/UnsubscribeButton";
-import { MaticLogo } from "../../Icons/Icons";
 
 type Props = {
   currentPlanId?: BigNumber;
@@ -20,7 +19,7 @@ export default function SubscriptionPlan({
   currentPlanId,
 }: Props) {
   const { address } = useAppSelector((state) => state.web3);
-  const isCreator = address === creator;
+  const isCreator = address?.toLowerCase() === creator.toLowerCase();
 
   return (
     <Box

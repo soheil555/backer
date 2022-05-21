@@ -15,6 +15,7 @@ import { parsePeriod } from "../../utils";
 import Status from "../../components/Stat/Stat";
 import StatTitle from "../../components/Stat/StatTitle";
 import StatText from "../../components/Stat/StatText";
+import { MaticLogo } from "../Icons/Icons";
 
 const Web3Button = dynamic(() => import("../CustomButtons/Web3Button"), {
   ssr: false,
@@ -33,9 +34,12 @@ export default function DashboardNavbar() {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Heading p={3} fontWeight="light">
-          Backer
-        </Heading>
+        <Box display="flex" alignItems="center">
+          <MaticLogo fontSize="xl" />
+          <Heading p={3} fontWeight="light">
+            Backer
+          </Heading>
+        </Box>
 
         <Box>
           <Status>

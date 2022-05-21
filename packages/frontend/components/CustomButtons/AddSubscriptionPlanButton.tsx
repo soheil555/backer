@@ -30,7 +30,6 @@ import { parsePeriod } from "../../utils";
 import useBackerContract from "../../hooks/useBackerContract";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ethers } from "ethers";
-import { MaticLogo } from "../Icons/Icons";
 
 const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
   (props, ref) => {
