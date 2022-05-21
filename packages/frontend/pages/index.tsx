@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { Container, Heading, Text, Box } from "@chakra-ui/react";
+import { Container, Heading, Text, Box, Button } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import useAppSelector from "../hooks/useAppSelector";
@@ -10,6 +10,16 @@ const Web3Button = dynamic(
   () => import("../components/CustomButtons/Web3Button"),
   {
     ssr: false,
+    loading: () => (
+      <Button
+        isLoading
+        mt={10}
+        letterSpacing="wider"
+        variant="outline"
+        colorScheme="purple"
+        size="lg"
+      />
+    ),
   }
 );
 

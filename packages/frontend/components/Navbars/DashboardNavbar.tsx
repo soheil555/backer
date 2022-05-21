@@ -4,6 +4,7 @@ import {
   Box,
   useDisclosure,
   IconButton,
+  Button,
 } from "@chakra-ui/react";
 import { SidebarResponsive } from "../Sidebar/Sidebar";
 import { dashboardRoutes } from "../../routes";
@@ -17,6 +18,16 @@ import StatText from "../../components/Stat/StatText";
 
 const Web3Button = dynamic(() => import("../CustomButtons/Web3Button"), {
   ssr: false,
+  loading: () => (
+    <Button
+      isLoading
+      mt={10}
+      letterSpacing="wider"
+      variant="outline"
+      colorScheme="purple"
+      size="lg"
+    />
+  ),
 });
 
 export default function DashboardNavbar() {
