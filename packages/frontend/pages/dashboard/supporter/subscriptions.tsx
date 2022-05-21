@@ -22,12 +22,17 @@ import DashboardLayout from "../../../layouts/Dashboard";
 import { Page } from "../../../types/page";
 import Card from "../../../components/Card/Card";
 import useAppSelector from "../../../hooks/useAppSelector";
-import { parseBalance } from "../../../utils";
+import { calcRemainPeriods, parseBalance } from "../../../utils";
 import UnsubscribeButton from "../../../components/CustomButtons/UnsubscribeButton";
 import useSubscriptions from "../../../hooks/useSubscriptions";
 import useBackerContract from "../../../hooks/useBackerContract";
+import useCurrentPeriod from "../../../hooks/useCurrentPeriod";
+import Status from "../../../components/Stat/Stat";
+import StatTitle from "../../../components/Stat/StatTitle";
+import StatText from "../../../components/Stat/StatText";
 
 const Subscriptions: Page = () => {
+  const { data: currentPeriod } = useCurrentPeriod();
   const toast = useToast();
   const { address } = useAppSelector((state) => state.web3);
   const backer = useBackerContract();
@@ -111,22 +116,34 @@ const Subscriptions: Page = () => {
                         justifyContent="space-between"
                       >
                         <Box>
-                          <Text>
-                            subscription plan :{" "}
-                            {subscription.subscriptionPlan.name}
-                          </Text>
+                          <Status>
+                            <StatTitle>Subscription plan:</StatTitle>
+                            <StatText>
+                              {subscription.subscriptionPlan.name}
+                            </StatText>
+                          </Status>
 
-                          <Text>
-                            Amount you pays to the creator each period:{" "}
-                            {parseBalance(
-                              subscription.subscriptionPlan.amountPerPeriod
-                            )}
-                          </Text>
+                          <Status>
+                            <StatTitle>
+                              Amount you would pay to the creator each period:
+                            </StatTitle>
+                            <StatText>
+                              {parseBalance(
+                                subscription.subscriptionPlan.amountPerPeriod
+                              )}{" "}
+                              Matic
+                            </StatText>
+                          </Status>
 
-                          <Text>
-                            After last period:{" "}
-                            {subscription.afterLastPeriod.toString()}
-                          </Text>
+                          <Status>
+                            <StatTitle>Number of remaining periods:</StatTitle>
+                            <StatText>
+                              {calcRemainPeriods(
+                                subscription.afterLastPeriod,
+                                currentPeriod
+                              ).toString()}
+                            </StatText>
+                          </Status>
                         </Box>
 
                         <UnsubscribeButton

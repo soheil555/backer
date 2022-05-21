@@ -12,7 +12,6 @@ import {
   AccordionIcon,
   Spinner,
   VStack,
-  Text,
   Stat,
   StatLabel,
   StatNumber,
@@ -26,9 +25,13 @@ import useBackerContract from "../../../hooks/useBackerContract";
 import useAppSelector from "../../../hooks/useAppSelector";
 import Card from "../../../components/Card/Card";
 import useCreatorPayment from "../../../hooks/useCreatorPayment";
-import { parseBalance } from "../../../utils";
+import { calcRemainPeriods, parseBalance } from "../../../utils";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import useSubscribers from "../../../hooks/useSubscribers";
+import useCurrentPeriod from "../../../hooks/useCurrentPeriod";
+import Status from "../../../components/Stat/Stat";
+import StatTitle from "../../../components/Stat/StatTitle";
+import StatText from "../../../components/Stat/StatText";
 
 const Subscribers: Page = () => {
   const toast = useToast();
@@ -36,6 +39,7 @@ const Subscribers: Page = () => {
   const { web3Provider, address } = useAppSelector((state) => state.web3);
   const { data: creatorPayment } = useCreatorPayment(address);
   const { data: subscribers } = useSubscribers(address);
+  const { data: currentPeriod } = useCurrentPeriod();
 
   const handleRemoveExpiredSubscribers = () => {
     if (backer && web3Provider && address) {
@@ -138,7 +142,7 @@ const Subscribers: Page = () => {
             <Box display="flex" alignItems="center" gap={2}>
               <Tooltip
                 hasArrow
-                label="move entire payment to your account balance"
+                label="move entire payment to your account balance. High transaction fee"
               >
                 <InfoOutlineIcon />
               </Tooltip>
@@ -173,15 +177,22 @@ const Subscribers: Page = () => {
                     </h2>
                     <AccordionPanel pb={4}>
                       <VStack align="stretch" spacing={2}>
-                        <Text>
-                          Subscription plan id:{" "}
-                          {subscriber.subscriptionPlan.id.toString()}
-                        </Text>
+                        <Status>
+                          <StatTitle>Subscription plan: </StatTitle>
+                          <StatText>
+                            {subscriber.subscriptionPlan.name}
+                          </StatText>
+                        </Status>
 
-                        <Text>
-                          After last period:{" "}
-                          {subscriber.afterLastPeriod.toString()}
-                        </Text>
+                        <Status>
+                          <StatTitle>Number of remaining periods:</StatTitle>
+                          <StatText>
+                            {calcRemainPeriods(
+                              subscriber.afterLastPeriod,
+                              currentPeriod
+                            ).toString()}
+                          </StatText>
+                        </Status>
                       </VStack>
                     </AccordionPanel>
                   </AccordionItem>

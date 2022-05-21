@@ -1,4 +1,4 @@
-import type { BigNumberish } from "ethers";
+import { BigNumber, BigNumberish } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { period } from "./config/contract";
 
@@ -45,4 +45,22 @@ export function secondsToMdhms(seconds: number) {
 
 export function parsePeriod() {
   return secondsToMdhms(period);
+}
+
+export function calcRemainPeriods(
+  afterLastPeriod: BigNumber,
+  currentPeriod?: BigNumber
+) {
+  const zero = BigNumber.from(0);
+
+  if (!currentPeriod) {
+    return zero;
+  }
+
+  let result = afterLastPeriod.sub(currentPeriod).sub(BigNumber.from(1));
+  if (result.gte(zero)) {
+    return result;
+  }
+
+  return zero;
 }

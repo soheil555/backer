@@ -4,7 +4,6 @@ import {
   Box,
   useDisclosure,
   IconButton,
-  Text,
 } from "@chakra-ui/react";
 import { SidebarResponsive } from "../Sidebar/Sidebar";
 import { dashboardRoutes } from "../../routes";
@@ -12,6 +11,9 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import dynamic from "next/dynamic";
 import useCurrentPeriod from "../../hooks/useCurrentPeriod";
 import { parsePeriod } from "../../utils";
+import Status from "../../components/Stat/Stat";
+import StatTitle from "../../components/Stat/StatTitle";
+import StatText from "../../components/Stat/StatText";
 
 const Web3Button = dynamic(() => import("../CustomButtons/Web3Button"), {
   ssr: false,
@@ -34,12 +36,15 @@ export default function DashboardNavbar() {
         </Heading>
 
         <Box>
-          <Text> Period: {parsePeriod()}</Text>
+          <Status>
+            <StatTitle>Period:</StatTitle>
+            <StatText>{parsePeriod()}</StatText>
+          </Status>
 
-          <Text>
-            {" "}
-            Current Period: {currentPeriod ? currentPeriod.toString() : 0}{" "}
-          </Text>
+          <Status>
+            <StatTitle>Current Period:</StatTitle>
+            <StatText>{currentPeriod ? currentPeriod.toString() : 0}</StatText>
+          </Status>
         </Box>
 
         <Box>

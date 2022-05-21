@@ -6,6 +6,7 @@ import { parseBalance, parsePeriod } from "../../../utils";
 import DeleteSubscriptionPlanButton from "../../CustomButtons/DeleteSubscriptionPlanButton";
 import SubscribeButton from "../../CustomButtons/SubscribeButton";
 import UnsubscribeButton from "../../CustomButtons/UnsubscribeButton";
+import { MaticLogo } from "../../Icons/Icons";
 
 type Props = {
   currentPlanId?: BigNumber;

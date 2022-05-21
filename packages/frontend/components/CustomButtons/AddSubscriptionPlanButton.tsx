@@ -13,6 +13,8 @@ import {
   useDisclosure,
   FormControl,
   FormLabel,
+  InputGroup,
+  InputLeftElement,
   Input,
   NumberInput,
   NumberInputField,
@@ -28,6 +30,7 @@ import { parsePeriod } from "../../utils";
 import useBackerContract from "../../hooks/useBackerContract";
 import useAppSelector from "../../hooks/useAppSelector";
 import { ethers } from "ethers";
+import { MaticLogo } from "../Icons/Icons";
 
 const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
   (props, ref) => {
@@ -88,6 +91,7 @@ const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
             <ModalBody>
               <FormControl isRequired mb={4}>
                 <FormLabel>Name</FormLabel>
+
                 <Input
                   value={name}
                   onChange={(event) => {
@@ -96,6 +100,7 @@ const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
                   name="name"
                   type="text"
                 />
+
                 <FormHelperText>
                   Name of the plan. e.g "gold plan"
                 </FormHelperText>
@@ -103,6 +108,7 @@ const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
 
               <FormControl isRequired>
                 <FormLabel>Amount per period</FormLabel>
+
                 <NumberInput
                   value={amountPerPeriod}
                   onChange={(value) => setAmountPerPeriod(value)}
@@ -116,8 +122,10 @@ const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
                     <NumberDecrementStepper />
                   </NumberInputStepper>
                 </NumberInput>
+
                 <FormHelperText>
-                  Amount of money the supporter pays you every {parsePeriod()}.
+                  Amount of Matic the supporter would pay you every{" "}
+                  {parsePeriod()}.
                 </FormHelperText>
               </FormControl>
             </ModalBody>
