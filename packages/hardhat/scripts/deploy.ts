@@ -3,7 +3,8 @@ import { ethers } from "hardhat";
 async function main() {
   // We get the contract to deploy
   const Backer = await ethers.getContractFactory("Backer");
-  const period = 10;
+  const period = ethers.BigNumber.from(process.env.PERIOD);
+  console.log("period is:", period.toString());
   const backer = await Backer.deploy(period);
   await backer.deployed();
 
