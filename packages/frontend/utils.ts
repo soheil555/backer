@@ -12,7 +12,7 @@ export function parseBalance(
 
 export function secondsToMdhms(seconds: number) {
   const months = Math.floor(seconds / (3600 * 24 * 30));
-  const days = Math.floor(((seconds % (3600 * 24 * 30)) / 3600) * 24);
+  const days = Math.floor((seconds % (3600 * 24 * 30)) / (3600 * 24));
   const hours = Math.floor((seconds % (3600 * 24)) / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainSeconds = Math.floor(seconds % 60);

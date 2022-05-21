@@ -8,4 +8,9 @@ if (network === "localhost") {
   period = 10;
 }
 
+if (network === "mumbai") {
+  address = "0x47F2AA29937adec634A17b72A5509841e67669C3";
+  period = 60;
+}
+
 export { address, period };

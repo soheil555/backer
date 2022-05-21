@@ -7,7 +7,8 @@
     "build": "yarn workspace backer-frontend build",
     "start": "yarn workspace backer-frontend start",
     "chain": "yarn workspace backer-hardhat chain",
-    "deploy": "yarn workspace backer-hardhat deploy",
+    "deploy-localhost": "yarn workspace backer-hardhat deploy-localhost",
+    "deploy-mumbai": "yarn workspace backer-hardhat deploy-mumbai",
     "compile": "yarn workspace backer-hardhat compile",
     "hardhat-test": "yarn workspace backer-hardhat test"
   },
