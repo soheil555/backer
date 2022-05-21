@@ -98,9 +98,9 @@ const Subscriptions: Page = () => {
         subscriptions.length ? (
           <Box w="100%">
             <Accordion allowToggle height="600px" pr={2} overflowY="scroll">
-              {subscriptions.map((subscription) => {
+              {subscriptions.map((subscription, i) => {
                 return (
-                  <AccordionItem>
+                  <AccordionItem key={i}>
                     <h2>
                       <AccordionButton>
                         <Box flex="1" textAlign="left">

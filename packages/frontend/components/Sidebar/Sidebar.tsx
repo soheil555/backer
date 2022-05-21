@@ -22,10 +22,10 @@ type SidebarProps = {
 };
 
 const createLinks = (routes: Route[]) => {
-  return routes.map((route) => {
+  return routes.map((route, i) => {
     if (route.category) {
       return (
-        <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column" key={i}>
           <Heading fontWeight="light" fontSize={24} mb={4}>
             {route.name}
           </Heading>
@@ -35,7 +35,7 @@ const createLinks = (routes: Route[]) => {
     }
 
     return (
-      <NextLink href={route.path!} passHref>
+      <NextLink href={route.path!} key={i} passHref>
         <Link
           bg="whiteAlpha.900"
           fontSize={25}

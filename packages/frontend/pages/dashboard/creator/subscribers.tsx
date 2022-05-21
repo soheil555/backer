@@ -164,9 +164,9 @@ const Subscribers: Page = () => {
         subscribers.length ? (
           <Box w="100%">
             <Accordion allowToggle height="600px" pr={2} overflowY="scroll">
-              {subscribers.map((subscriber) => {
+              {subscribers.map((subscriber, i) => {
                 return (
-                  <AccordionItem>
+                  <AccordionItem key={i}>
                     <h2>
                       <AccordionButton>
                         <Box flex="1" textAlign="left">

@@ -48,13 +48,14 @@ export default function SubscriptionPlans({ creator }: Props) {
         pr={4}
       >
         {plans && plans.length > 0 ? (
-          plans.map((plan) => (
+          plans.map((plan, i) => (
             <SubscriptionPlanComponent
               id={plan.id}
               name={plan.name}
               amountPerPeriod={plan.amountPerPeriod}
               creator={creator}
               currentPlanId={currentPlanId}
+              key={i}
             />
           ))
         ) : (
