@@ -8,7 +8,6 @@ import {
   AccordionPanel,
   AccordionIcon,
   Spinner,
-  Text,
   Stat,
   StatLabel,
   StatNumber,

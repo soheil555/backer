@@ -1,4 +1,4 @@
-import { Heading, SimpleGrid } from "@chakra-ui/react";
+import { Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
 import useBackerContract from "../../../hooks/useBackerContract";
 import { useEffect, useState } from "react";
 import useAppSelector from "../../../hooks/useAppSelector";
@@ -39,29 +39,42 @@ export default function SubscriptionPlans({ creator }: Props) {
   }, [web3Provider, backer, plans]);
 
   return (
-    <Card flexDirection="column" w="100%">
-      <SimpleGrid
-        minChildWidth="250px"
-        height="400px"
-        overflowY="scroll"
-        spacing={10}
-        pr={4}
-      >
-        {plans && plans.length > 0 ? (
-          plans.map((plan, i) => (
-            <SubscriptionPlanComponent
-              id={plan.id}
-              name={plan.name}
-              amountPerPeriod={plan.amountPerPeriod}
-              creator={creator}
-              currentPlanId={currentPlanId}
-              key={i}
-            />
-          ))
-        ) : (
-          <Heading color="gray.500">No subscription plan is available.</Heading>
-        )}
-      </SimpleGrid>
+    <Card
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      w="100%"
+      height="400px"
+    >
+      {plans ? (
+        <SimpleGrid
+          minChildWidth="250px"
+          width="100%"
+          height="100%"
+          overflowY="scroll"
+          spacing={10}
+          pr={4}
+        >
+          {plans.length > 0 ? (
+            plans.map((plan, i) => (
+              <SubscriptionPlanComponent
+                id={plan.id}
+                name={plan.name}
+                amountPerPeriod={plan.amountPerPeriod}
+                creator={creator}
+                currentPlanId={currentPlanId}
+                key={i}
+              />
+            ))
+          ) : (
+            <Heading color="gray.500">
+              No subscription plan is available.
+            </Heading>
+          )}
+        </SimpleGrid>
+      ) : (
+        <Spinner size="xl" />
+      )}
     </Card>
   );
 }

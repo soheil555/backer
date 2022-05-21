@@ -14,7 +14,6 @@ const Web3Button = dynamic(
       <Button
         isLoading
         mt={10}
-        letterSpacing="wider"
         variant="outline"
         colorScheme="purple"
         size="lg"

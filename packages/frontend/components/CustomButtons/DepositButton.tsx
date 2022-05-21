@@ -83,7 +83,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
               value={depositValue}
               mt={2}
               defaultValue={0}
-              precision={3}
+              precision={4}
               step={0.5}
               min={0}
             >

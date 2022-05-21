@@ -5,7 +5,7 @@ import { period } from "./config/contract";
 export function parseBalance(
   value: BigNumberish,
   decimals = 18,
-  decimalsToDisplay = 3
+  decimalsToDisplay = 4
 ) {
   return parseFloat(formatUnits(value, decimals)).toFixed(decimalsToDisplay);
 }

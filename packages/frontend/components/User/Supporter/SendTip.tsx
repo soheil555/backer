@@ -86,7 +86,7 @@ export default function SendTip({ address }: Props) {
           value={value}
           mt={2}
           defaultValue={0}
-          precision={2}
+          precision={4}
           step={0.5}
           min={0}
           max={Number(parseBalance(accountBalance ?? 0, 18, 5))}

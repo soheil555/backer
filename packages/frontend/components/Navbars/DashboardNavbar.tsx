@@ -18,16 +18,7 @@ import StatText from "../../components/Stat/StatText";
 
 const Web3Button = dynamic(() => import("../CustomButtons/Web3Button"), {
   ssr: false,
-  loading: () => (
-    <Button
-      isLoading
-      mt={10}
-      letterSpacing="wider"
-      variant="outline"
-      colorScheme="purple"
-      size="lg"
-    />
-  ),
+  loading: () => <Button isLoading variant="outline" colorScheme="purple" />,
 });
 
 export default function DashboardNavbar() {

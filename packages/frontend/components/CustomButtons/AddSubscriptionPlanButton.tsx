@@ -114,7 +114,7 @@ const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
                   onChange={(value) => setAmountPerPeriod(value)}
                   min={0}
                   step={0.5}
-                  precision={3}
+                  precision={4}
                 >
                   <NumberInputField />
                   <NumberInputStepper>

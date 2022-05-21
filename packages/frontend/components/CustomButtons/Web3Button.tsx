@@ -10,7 +10,8 @@ import {
   setAddress,
   setWeb3Provider,
 } from "../../redux/slices/web3Slice";
-import { Button, ButtonProps, forwardRef } from "@chakra-ui/react";
+import { Button, ButtonProps, forwardRef, useToast } from "@chakra-ui/react";
+import { chainId } from "../../config/contract";
 
 let web3Modal: Web3Modal.default;
 if (typeof window !== "undefined") {
@@ -29,6 +30,7 @@ type Web3ButtonProps = ButtonProps & {
 
 const Web3Button = forwardRef<Web3ButtonProps, "button">(
   ({ connectedMessage, disconnectedMessage, ...restProps }, ref) => {
+    const toast = useToast();
     const { provider, web3Provider } = useAppSelector((state) => state.web3);
 
     const dispatch = useAppDispatch();
@@ -60,6 +62,17 @@ const Web3Button = forwardRef<Web3ButtonProps, "button">(
       const signer = web3Provider.getSigner();
       const address = await signer.getAddress();
       const network = await web3Provider.getNetwork();
+
+      if (chainId != network.chainId) {
+        toast({
+          title: "Wrong ChainId",
+          description: `Please connect to network with chainId ${chainId}`,
+          status: "error",
+          isClosable: true,
+          duration: 5000,
+        });
+        return;
+      }
 
       dispatch(
         setWeb3Provider({
