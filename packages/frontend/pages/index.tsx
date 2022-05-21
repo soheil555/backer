@@ -1,5 +1,12 @@
 import type { NextPage } from "next";
-import { Container, Heading, Text, Box, Button } from "@chakra-ui/react";
+import {
+  Container,
+  Heading,
+  Text,
+  Box,
+  Button,
+  Spinner,
+} from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import useAppSelector from "../hooks/useAppSelector";
@@ -31,6 +38,14 @@ const Home: NextPage = () => {
       router.push("/dashboard");
     }
   }, [web3Provider]);
+
+  if (web3Provider) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" h="100vh">
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
 
   return (
     <Box>
