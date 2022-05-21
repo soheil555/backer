@@ -13,6 +13,7 @@ import {
   DrawerHeader,
   DrawerFooter,
   Heading,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import type { Route } from "../../routes";
@@ -21,7 +22,7 @@ type SidebarProps = {
   routes: Route[];
 };
 
-const createLinks = (routes: Route[]) => {
+const createLinks = (routes: Route[], onClose?: () => void) => {
   return routes.map((route, i) => {
     if (route.category) {
       return (
@@ -29,7 +30,7 @@ const createLinks = (routes: Route[]) => {
           <Heading fontWeight="light" fontSize={24} mb={4}>
             {route.name}
           </Heading>
-          {createLinks(route.views!)}
+          {createLinks(route.views!, onClose)}
         </Box>
       );
     }
@@ -37,6 +38,7 @@ const createLinks = (routes: Route[]) => {
     return (
       <NextLink href={route.path!} key={i} passHref>
         <Link
+          onClick={onClose}
           bg="whiteAlpha.900"
           fontSize={25}
           p={3}
@@ -81,6 +83,10 @@ export function SidebarResponsive({
   isOpen,
   onClose,
 }: SidebarResponsiveProps) {
+  const display = useBreakpointValue({ base: "block", lg: "none" });
+  if (display === "none") {
+    onClose();
+  }
   return (
     <Drawer size="sm" placement="left" isOpen={isOpen} onClose={onClose}>
       <DrawerOverlay />
@@ -90,7 +96,7 @@ export function SidebarResponsive({
 
         <DrawerBody mt={10}>
           <VStack spacing={10} align="stretch" mx={2}>
-            {createLinks(routes)}
+            {createLinks(routes, onClose)}
           </VStack>
         </DrawerBody>
 
