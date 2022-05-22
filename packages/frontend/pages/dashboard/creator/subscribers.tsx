@@ -6,12 +6,7 @@ import {
   Container,
   Heading,
   Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   Spinner,
-  VStack,
   Stat,
   StatLabel,
   StatNumber,
@@ -25,14 +20,10 @@ import useBackerContract from "../../../hooks/useBackerContract";
 import useAppSelector from "../../../hooks/useAppSelector";
 import Card from "../../../components/Card/Card";
 import useCreatorPayment from "../../../hooks/useCreatorPayment";
-import { calcRemainPeriods, parseBalance } from "../../../utils";
+import { parseBalance } from "../../../utils";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import useSubscribers from "../../../hooks/useSubscribers";
-import useCurrentPeriod from "../../../hooks/useCurrentPeriod";
-import Status from "../../../components/Stat/Stat";
-import StatTitle from "../../../components/Stat/StatTitle";
-import StatText from "../../../components/Stat/StatText";
-import Subscriber from "./subscriber";
+import Subscriber from "../../../components/User/Creator/Subscriber";
 
 const Subscribers: Page = () => {
   const toast = useToast();
@@ -40,7 +31,6 @@ const Subscribers: Page = () => {
   const { web3Provider, address } = useAppSelector((state) => state.web3);
   const { data: creatorPayment } = useCreatorPayment(address);
   const { data: subscribers } = useSubscribers(address);
-  const { data: currentPeriod } = useCurrentPeriod();
 
   const handleRemoveExpiredSubscribers = () => {
     if (backer && web3Provider && address) {
