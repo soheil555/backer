@@ -11,7 +11,7 @@ if (network === "localhost") {
 }
 
 if (network === "mumbai") {
-  address = "0xa00a08D8b638B39778c0c19119275183E5b3E11C";
+  address = "0x8BD356030E911A09FE0986267926B463C9Fb0Ab6";
   period = 60;
   chainId = 80001;
 }

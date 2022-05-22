@@ -43,7 +43,8 @@ const AddDomainButton = forwardRef<Props, "button">(
         await backer.setDomain(domain);
         toast({
           title: "Set domain",
-          description: "Set domain successfully",
+          description:
+            "Set domain successfully, please wait for tx confirmation",
           status: "success",
           isClosable: true,
           duration: 5000,

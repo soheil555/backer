@@ -73,8 +73,8 @@ const DeleteSubscriptionPlanButton = forwardRef<Props, "button">(
             <ModalBody>
               <Text>
                 Remember when you delete a plan, all the subscribers will be
-                unsubscribed from the plan and even current period pledge money
-                will be returned to their accounts.
+                unsubscribed from the plan and remaining pledge money(includes
+                current period) will be returned to their accounts.
               </Text>
             </ModalBody>
 

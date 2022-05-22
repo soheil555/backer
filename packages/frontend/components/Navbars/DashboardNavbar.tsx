@@ -43,7 +43,7 @@ export default function DashboardNavbar() {
 
         <Box>
           <Status>
-            <StatTitle>Period:</StatTitle>
+            <StatTitle>Each Period:</StatTitle>
             <StatText>{parsePeriod()}</StatText>
           </Status>
 
