@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Heading,
   Text,
   Tooltip,
@@ -9,6 +10,7 @@ import {
 import { useEffect } from "react";
 import useAppSelector from "../../hooks/useAppSelector";
 import Card from "../Card/Card";
+import AddDomainButton from "../CustomButtons/AddDomainButton";
 
 export default function UserInfo() {
   const toast = useToast();
@@ -37,15 +39,28 @@ export default function UserInfo() {
   return (
     <Card alignItems="center" flexWrap="wrap" gap={4}>
       {isUser && (
-        <Box minW="400px" flex={1}>
-          <Heading fontWeight="light" mb={1} fontSize={20}>
-            UNS Domain name
-          </Heading>
-          <Text onClick={userOnCopy} cursor="pointer" display="inline">
-            <Tooltip hasArrow label="copy to clipboard">
-              {user.sub}
-            </Tooltip>
-          </Text>
+        <Box
+          minW="400px"
+          flex={1}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Box>
+            <Heading fontWeight="light" mb={1} fontSize={20}>
+              UNS Domain name
+            </Heading>
+            <Text onClick={userOnCopy} cursor="pointer" display="inline">
+              <Tooltip hasArrow label="copy to clipboard">
+                {user.sub}
+              </Tooltip>
+            </Text>
+          </Box>
+          <AddDomainButton
+            domain={user.sub}
+            colorScheme="purple"
+            variant="outline"
+          />
         </Box>
       )}
 

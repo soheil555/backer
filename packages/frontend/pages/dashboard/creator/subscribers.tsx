@@ -32,6 +32,7 @@ import useCurrentPeriod from "../../../hooks/useCurrentPeriod";
 import Status from "../../../components/Stat/Stat";
 import StatTitle from "../../../components/Stat/StatTitle";
 import StatText from "../../../components/Stat/StatText";
+import Subscriber from "./subscriber";
 
 const Subscribers: Page = () => {
   const toast = useToast();
@@ -165,38 +166,7 @@ const Subscribers: Page = () => {
           <Box w="100%">
             <Accordion allowToggle height="600px" pr={2} overflowY="scroll">
               {subscribers.map((subscriber, i) => {
-                return (
-                  <AccordionItem key={i}>
-                    <h2>
-                      <AccordionButton>
-                        <Box flex="1" textAlign="left">
-                          {subscriber.supporter}
-                        </Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel pb={4}>
-                      <VStack align="stretch" spacing={2}>
-                        <Status>
-                          <StatTitle>Subscription plan: </StatTitle>
-                          <StatText>
-                            {subscriber.subscriptionPlan.name}
-                          </StatText>
-                        </Status>
-
-                        <Status>
-                          <StatTitle>Number of remaining periods:</StatTitle>
-                          <StatText>
-                            {calcRemainPeriods(
-                              subscriber.afterLastPeriod,
-                              currentPeriod
-                            ).toString()}
-                          </StatText>
-                        </Status>
-                      </VStack>
-                    </AccordionPanel>
-                  </AccordionItem>
-                );
+                return <Subscriber key={i} subscriber={subscriber} />;
               })}
             </Accordion>
           </Box>

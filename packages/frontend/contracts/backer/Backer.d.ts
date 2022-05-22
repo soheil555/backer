@@ -32,6 +32,7 @@ interface BackerInterface extends ethers.utils.Interface {
     "getCreatorPayment(address)": FunctionFragment;
     "getCreatorSubscribers(address)": FunctionFragment;
     "getCreatorSubscriptionPlans(address)": FunctionFragment;
+    "getDomain(address)": FunctionFragment;
     "getSupporterCreatorSubscription(address,address)": FunctionFragment;
     "getSupporterSubscriptions(address)": FunctionFragment;
     "newSubscriptionPlan(uint256,string)": FunctionFragment;
@@ -39,6 +40,7 @@ interface BackerInterface extends ethers.utils.Interface {
     "removeExpiredSubscribers(address)": FunctionFragment;
     "removeExpiredSubscriptions(address)": FunctionFragment;
     "sendTip(address,uint256)": FunctionFragment;
+    "setDomain(string)": FunctionFragment;
     "subscribe(address,uint256,uint256)": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
   };
@@ -77,6 +79,7 @@ interface BackerInterface extends ethers.utils.Interface {
     functionFragment: "getCreatorSubscriptionPlans",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "getDomain", values: [string]): string;
   encodeFunctionData(
     functionFragment: "getSupporterCreatorSubscription",
     values: [string, string]
@@ -102,6 +105,7 @@ interface BackerInterface extends ethers.utils.Interface {
     functionFragment: "sendTip",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "setDomain", values: [string]): string;
   encodeFunctionData(
     functionFragment: "subscribe",
     values: [string, BigNumberish, BigNumberish]
@@ -145,6 +149,7 @@ interface BackerInterface extends ethers.utils.Interface {
     functionFragment: "getCreatorSubscriptionPlans",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getDomain", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getSupporterCreatorSubscription",
     data: BytesLike
@@ -167,6 +172,7 @@ interface BackerInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "sendTip", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setDomain", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "subscribe", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
@@ -336,6 +342,8 @@ export class Backer extends BaseContract {
       ]
     >;
 
+    getDomain(_address: string, overrides?: CallOverrides): Promise<[string]>;
+
     getSupporterCreatorSubscription(
       supporter: string,
       creator: string,
@@ -412,6 +420,11 @@ export class Backer extends BaseContract {
     sendTip(
       creator: string,
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setDomain(
+      domain: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -498,6 +511,8 @@ export class Backer extends BaseContract {
     })[]
   >;
 
+  getDomain(_address: string, overrides?: CallOverrides): Promise<string>;
+
   getSupporterCreatorSubscription(
     supporter: string,
     creator: string,
@@ -570,6 +585,11 @@ export class Backer extends BaseContract {
   sendTip(
     creator: string,
     amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setDomain(
+    domain: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -649,6 +669,8 @@ export class Backer extends BaseContract {
       })[]
     >;
 
+    getDomain(_address: string, overrides?: CallOverrides): Promise<string>;
+
     getSupporterCreatorSubscription(
       supporter: string,
       creator: string,
@@ -723,6 +745,8 @@ export class Backer extends BaseContract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setDomain(domain: string, overrides?: CallOverrides): Promise<void>;
 
     subscribe(
       creator: string,
@@ -880,6 +904,8 @@ export class Backer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getDomain(_address: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     getSupporterCreatorSubscription(
       supporter: string,
       creator: string,
@@ -912,6 +938,11 @@ export class Backer extends BaseContract {
     sendTip(
       creator: string,
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setDomain(
+      domain: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -975,6 +1006,11 @@ export class Backer extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getDomain(
+      _address: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getSupporterCreatorSubscription(
       supporter: string,
       creator: string,
@@ -1007,6 +1043,11 @@ export class Backer extends BaseContract {
     sendTip(
       creator: string,
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setDomain(
+      domain: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

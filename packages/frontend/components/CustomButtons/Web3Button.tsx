@@ -31,7 +31,9 @@ type Web3ButtonProps = ButtonProps & {
 const Web3Button = forwardRef<Web3ButtonProps, "button">(
   ({ connectedMessage, disconnectedMessage, ...restProps }, ref) => {
     const toast = useToast();
-    const { provider, web3Provider } = useAppSelector((state) => state.web3);
+    const { provider, web3Provider, address } = useAppSelector(
+      (state) => state.web3
+    );
 
     const dispatch = useAppDispatch();
 
@@ -43,47 +45,50 @@ const Web3Button = forwardRef<Web3ButtonProps, "button">(
       return UAuthWeb3Modal.getUAuth(uauthPackage, uauthOptions);
     }, []);
 
-    const connect = useCallback(async function () {
-      let provider;
-      try {
-        provider = await web3Modal.connect();
-      } catch (err) {
-        console.log("connection failed");
-        return;
-      }
+    const connect = useCallback(
+      async function () {
+        let provider;
+        try {
+          provider = await web3Modal.connect();
+        } catch (err) {
+          console.log("connection failed");
+          return;
+        }
 
-      let user: any;
-      if (web3Modal.cachedProvider === "custom-uauth") {
-        user = await uauth.user();
-      }
+        let user: any;
+        if (web3Modal.cachedProvider === "custom-uauth") {
+          user = await uauth.user();
+        }
 
-      const web3Provider = new ethers.providers.Web3Provider(provider);
+        const web3Provider = new ethers.providers.Web3Provider(provider);
 
-      const signer = web3Provider.getSigner();
-      const address = await signer.getAddress();
-      const network = await web3Provider.getNetwork();
+        const signer = web3Provider.getSigner(user?.wallet_address);
+        const address = await signer.getAddress();
+        const network = await web3Provider.getNetwork();
 
-      if (chainId != network.chainId) {
-        toast({
-          title: "Wrong ChainId",
-          description: `Please connect to network with chainId ${chainId}`,
-          status: "error",
-          isClosable: true,
-          duration: 5000,
-        });
-        return;
-      }
+        if (chainId != network.chainId) {
+          toast({
+            title: "Wrong ChainId",
+            description: `Please connect to the network with chainId ${chainId}`,
+            status: "error",
+            isClosable: true,
+            duration: 5000,
+          });
+          return;
+        }
 
-      dispatch(
-        setWeb3Provider({
-          provider,
-          web3Provider,
-          address,
-          chainId: network.chainId,
-          user,
-        })
-      );
-    }, []);
+        dispatch(
+          setWeb3Provider({
+            provider,
+            web3Provider,
+            address,
+            chainId: network.chainId,
+            user,
+          })
+        );
+      },
+      [address]
+    );
 
     const disconnect = useCallback(async function () {
       await web3Modal.clearCachedProvider();
@@ -104,11 +109,15 @@ const Web3Button = forwardRef<Web3ButtonProps, "button">(
       if (provider?.on) {
         const handleAccountsChanged = (accounts: string[]) => {
           console.log("accounts changed", accounts);
-          dispatch(
-            setAddress({
-              address: accounts[0],
-            })
-          );
+
+          disconnect();
+          connect();
+
+          // dispatch(
+          //   setAddress({
+          //     address: accounts[0],
+          //   })
+          // );
         };
 
         const handleChainChanged = (_hexChainId: string) => {

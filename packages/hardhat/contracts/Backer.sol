@@ -71,6 +71,9 @@ contract Backer is ReEntrancyGuard {
     // address => balance
     mapping(address => uint256) balances;
 
+    // address => domain
+    mapping(address => string) domains;
+
     constructor(uint256 _period) {
         period = _period;
         contractStartTime = block.timestamp;
@@ -81,6 +84,17 @@ contract Backer is ReEntrancyGuard {
     function currentPeriod() public view returns (uint256) {
         return (block.timestamp - contractStartTime) / period;
     }
+
+
+    //TODO: make sure msg.sender actually owns the domain
+    function setDomain(string calldata domain) external {
+        domains[msg.sender] = domain;
+    }
+
+    function getDomain(address _address) external view returns (string memory) {
+        return domains[_address];
+    }
+
 
     /***** DEPOSIT & WITHDRAW *****/
 

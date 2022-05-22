@@ -44,8 +44,6 @@ const UnsubscribeButton = forwardRef<Props, "button">(
           });
           onClose();
         } catch (error) {
-          console.log("error");
-          console.log(error);
           console.error(error);
           toast({
             title: "Unsubscribe",

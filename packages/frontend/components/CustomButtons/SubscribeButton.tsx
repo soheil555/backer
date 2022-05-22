@@ -49,7 +49,6 @@ const SubscribeButton = forwardRef<Props, "button">(
         const signer = web3Provider.getSigner(address);
 
         try {
-          console.log("herererere");
           await backer
             .connect(signer)
             .subscribe(

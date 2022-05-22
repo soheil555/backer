@@ -16,6 +16,9 @@ import { useState, ReactElement } from "react";
 import { Page } from "../../../types/page";
 import SubscriptionPlans from "../../../components/User/Creator/SubscriptionPlans";
 import SendTip from "../../../components/User/Supporter/SendTip";
+import Stat from "../../../components/Stat/Stat";
+import StatTitle from "../../../components/Stat/StatTitle";
+import StatText from "../../../components/Stat/StatText";
 
 const resolution = new Resolution();
 
@@ -25,7 +28,7 @@ const Support: Page = () => {
   const [error, setError] = useState<string>("");
   const [address, setAddress] = useState<string>("");
 
-  const resolveAddress = (input: string, currency: string) => {
+  const resolveAddress = (input: string) => {
     setIsloading(true);
 
     if (utils.isAddress(input)) {
@@ -36,13 +39,19 @@ const Support: Page = () => {
     }
 
     resolution
-      .addr(input, currency)
+      .owner(input)
       .then((address) => {
-        setAddress(address);
-        setError("");
+        if (address) {
+          setAddress(address);
+          setError("");
+        } else {
+          setError("UNS domain is invalid");
+          setAddress("");
+        }
       })
-      .catch(() => {
-        setError("UNS domain name is invalid");
+      .catch((error) => {
+        console.error(error);
+        setError("error resolving address");
         setAddress("");
       })
       .finally(() => {
@@ -73,7 +82,7 @@ const Support: Page = () => {
             )}
           </FormControl>
           <Button
-            onClick={() => resolveAddress(input, "ETH")}
+            onClick={() => resolveAddress(input)}
             isLoading={isLoading}
             colorScheme="purple"
             variant="outline"
@@ -87,13 +96,20 @@ const Support: Page = () => {
       </Box>
 
       {!!address.length && !isLoading ? (
-        <SimpleGrid mt={10} minChildWidth="400px" spacing={10}>
-          <SubscriptionPlans creator={address} />
+        <Box mt={10}>
+          <Stat>
+            <StatTitle>Creator's address:</StatTitle>
+            <StatText>{address}</StatText>
+          </Stat>
 
-          <Box height="250px">
-            <SendTip address={address} />
-          </Box>
-        </SimpleGrid>
+          <SimpleGrid mt={10} minChildWidth="400px" spacing={10}>
+            <SubscriptionPlans creator={address} />
+
+            <Box height="250px">
+              <SendTip address={address} />
+            </Box>
+          </SimpleGrid>
+        </Box>
       ) : null}
     </Box>
   );
