@@ -19,6 +19,7 @@ const AddDomainButton = forwardRef<Props, "button">(
   ({ domain, ...restProps }, ref) => {
     const toast = useToast();
     const [isLoading, setIsLoading] = useState(true);
+    const [isDisable, setIsDisable] = useState(false);
     const [alreadySet, setAlreadySet] = useState(false);
     const { address, web3Provider } = useAppSelector((state) => state.web3);
     const backer = useBackerContract();
@@ -37,28 +38,31 @@ const AddDomainButton = forwardRef<Props, "button">(
     }, [backer, address, web3Provider]);
 
     const handleSetDomain = async () => {
-      if (!backer) return;
-
-      try {
-        await backer.setDomain(domain);
-        toast({
-          title: "Set domain",
-          description:
-            "Set domain successfully, please wait for tx confirmation",
-          status: "success",
-          isClosable: true,
-          duration: 5000,
-        });
-        setAlreadySet(true);
-      } catch (error) {
-        console.error(error);
-        toast({
-          title: "Set domain",
-          description: "Failed to set domain",
-          status: "error",
-          isClosable: true,
-          duration: 5000,
-        });
+      if (backer && web3Provider && address) {
+        setIsDisable(true);
+        try {
+          const signer = web3Provider.getSigner(address);
+          await backer.connect(signer).setDomain(domain);
+          toast({
+            title: "Set domain",
+            description:
+              "Set domain successfully, please wait for tx confirmation",
+            status: "success",
+            isClosable: true,
+            duration: 5000,
+          });
+          setAlreadySet(true);
+        } catch (error) {
+          console.error(error);
+          toast({
+            title: "Set domain",
+            description: "Failed to set domain",
+            status: "error",
+            isClosable: true,
+            duration: 5000,
+          });
+        }
+        setIsDisable(false);
       }
     };
 
@@ -72,7 +76,7 @@ const AddDomainButton = forwardRef<Props, "button">(
         </Tooltip>
         <Button
           onClick={handleSetDomain}
-          isDisabled={alreadySet}
+          isDisabled={alreadySet || isDisable}
           isLoading={isLoading}
           ref={ref}
           {...restProps}
