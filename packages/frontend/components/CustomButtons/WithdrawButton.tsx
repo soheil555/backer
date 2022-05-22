@@ -88,7 +88,7 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
                 mt={2}
                 mr={2}
                 onClick={() => {
-                  setValue(parseBalance(accountBalance ?? 0, 18, 5));
+                  setValue(parseBalance(accountBalance ?? 0));
                 }}
               >
                 Max
@@ -103,7 +103,7 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
                 precision={4}
                 step={0.5}
                 min={0}
-                max={Number(parseBalance(accountBalance ?? 0, 18, 5))}
+                max={Number(parseBalance(accountBalance ?? 0))}
               >
                 <NumberInputField />
                 <NumberInputStepper>

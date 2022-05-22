@@ -28,7 +28,7 @@ export default function SendTip({ address }: Props) {
     (state) => state.web3
   );
   const { data: accountBalance } = useAccountBalance(userAddress);
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<string>("");
   const backer = useBackerContract();
 
   const handleSendTip = async () => {
@@ -39,7 +39,7 @@ export default function SendTip({ address }: Props) {
 
         await backer
           .connect(signer)
-          .sendTip(address, ethers.utils.parseEther(String(value)));
+          .sendTip(address, ethers.utils.parseEther(value));
 
         toast({
           title: "Send Tip",
@@ -49,7 +49,7 @@ export default function SendTip({ address }: Props) {
           duration: 5000,
         });
 
-        setValue(0);
+        setValue("");
       } catch (error) {
         console.error(error);
         toast({
@@ -79,14 +79,14 @@ export default function SendTip({ address }: Props) {
           mt={2}
           mr={2}
           onClick={() => {
-            setValue(Number(parseBalance(accountBalance ?? 0, 18, 5)));
+            setValue(parseBalance(accountBalance ?? 0));
           }}
         >
           Max
         </Button>
         <NumberInput
           onChange={(newValue) => {
-            setValue(Number(newValue));
+            setValue(newValue);
           }}
           value={value}
           mt={2}
@@ -94,7 +94,7 @@ export default function SendTip({ address }: Props) {
           precision={4}
           step={0.5}
           min={0}
-          max={Number(parseBalance(accountBalance ?? 0, 18, 5))}
+          max={Number(parseBalance(accountBalance ?? 0))}
         >
           <NumberInputField />
           <NumberInputStepper>
@@ -105,7 +105,7 @@ export default function SendTip({ address }: Props) {
       </Box>
       <Button
         onClick={handleSendTip}
-        isDisabled={value == 0 || isDisable}
+        isDisabled={value.length === 0 || isDisable}
         colorScheme="purple"
         variant="outline"
         mt={4}
