@@ -72,7 +72,7 @@ const DeleteSubscriptionPlanButton = forwardRef<Props, "button">(
         <Modal isCentered isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Unsubscribe</ModalHeader>
+            <ModalHeader>Delete the plan</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Text>
