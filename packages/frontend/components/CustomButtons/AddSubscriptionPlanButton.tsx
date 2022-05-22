@@ -37,11 +37,13 @@ const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [name, setName] = useState<string>("");
     const [amountPerPeriod, setAmountPerPeriod] = useState<string>("");
+    const [isDisable, setIsDisable] = useState(false);
     const { web3Provider, address } = useAppSelector((state) => state.web3);
     const backer = useBackerContract();
 
     const handleAddSubscriptionPlan = async () => {
       if (backer && web3Provider && address) {
+        setIsDisable(true);
         const signer = web3Provider.getSigner(address);
 
         try {
@@ -73,6 +75,7 @@ const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
             duration: 5000,
           });
         }
+        setIsDisable(false);
       }
     };
 
@@ -140,7 +143,9 @@ const AddSubscriptionPlanButton = forwardRef<ButtonProps, "button">(
               </Button>
               <Button
                 onClick={handleAddSubscriptionPlan}
-                isDisabled={name.length === 0 || amountPerPeriod.length === 0}
+                isDisabled={
+                  name.length === 0 || amountPerPeriod.length === 0 || isDisable
+                }
                 leftIcon={<PlusSquareIcon fontSize="2xl" />}
                 colorScheme="purple"
               >

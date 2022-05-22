@@ -30,6 +30,7 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
   const { web3Provider, address } = useAppSelector((state) => state.web3);
   const backer = useBackerContract();
   const { data: accountBalance } = useAccountBalance(address);
+  const [isDisable, setIsDisable] = useState(false);
 
   const [value, setValue] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,30 +38,35 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
   const buttonDisabled = !(!!web3Provider && !!backer);
 
   const handleWithdraw = async () => {
-    try {
-      const signer = web3Provider!.getSigner(address);
+    if (backer && web3Provider && address) {
+      setIsDisable(true);
+      try {
+        const signer = web3Provider.getSigner(address);
 
-      await backer!.connect(signer).withdraw(ethers.utils.parseEther(value));
+        await backer.connect(signer).withdraw(ethers.utils.parseEther(value));
 
-      toast({
-        title: "Withdraw",
-        description: "Withdraw Transaction sent, Please wait for confirmation",
-        status: "success",
-        isClosable: true,
-        duration: 5000,
-      });
+        toast({
+          title: "Withdraw",
+          description:
+            "Withdraw Transaction sent, Please wait for confirmation",
+          status: "success",
+          isClosable: true,
+          duration: 5000,
+        });
 
-      setValue("");
-      onClose();
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Withdraw",
-        description: "Withdraw Failed",
-        status: "error",
-        isClosable: true,
-        duration: 5000,
-      });
+        setValue("");
+        onClose();
+      } catch (error) {
+        console.error(error);
+        toast({
+          title: "Withdraw",
+          description: "Withdraw Failed",
+          status: "error",
+          isClosable: true,
+          duration: 5000,
+        });
+      }
+      setIsDisable(false);
     }
   };
 
@@ -119,7 +125,7 @@ const WithdrawButton = forwardRef<ButtonProps, "button">((props, ref) => {
             </Button>
             <Button
               onClick={handleWithdraw}
-              isDisabled={value.length === 0}
+              isDisabled={value.length === 0 || isDisable}
               colorScheme="purple"
             >
               Withdraw

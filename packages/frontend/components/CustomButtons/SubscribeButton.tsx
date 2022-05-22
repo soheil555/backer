@@ -38,6 +38,7 @@ const SubscribeButton = forwardRef<Props, "button">(
     const toast = useToast();
     const { web3Provider, address } = useAppSelector((state) => state.web3);
     const backer = useBackerContract();
+    const [isDisable, setIsDisable] = useState(false);
     const { data: userBalance } = useAccountBalance(address);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [numOfPeriod, setNumOfperiod] = useState(0);
@@ -46,6 +47,7 @@ const SubscribeButton = forwardRef<Props, "button">(
 
     const handleSubscribe = async () => {
       if (web3Provider && address && backer) {
+        setIsDisable(true);
         const signer = web3Provider.getSigner(address);
 
         try {
@@ -78,6 +80,7 @@ const SubscribeButton = forwardRef<Props, "button">(
             duration: 5000,
           });
         }
+        setIsDisable(false);
       }
     };
 
@@ -123,7 +126,7 @@ const SubscribeButton = forwardRef<Props, "button">(
                 Cancel
               </Button>
               <Button
-                isDisabled={numOfPeriod === 0}
+                isDisabled={numOfPeriod === 0 || isDisable}
                 onClick={handleSubscribe}
                 colorScheme="purple"
                 variant="solid"

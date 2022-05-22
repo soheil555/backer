@@ -15,6 +15,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { BigNumber } from "ethers";
+import { useState } from "react";
 import useAppSelector from "../../hooks/useAppSelector";
 import useBackerContract from "../../hooks/useBackerContract";
 
@@ -26,12 +27,14 @@ const DeleteSubscriptionPlanButton = forwardRef<Props, "button">(
   ({ subscriptionPlanId, ...restProps }, ref) => {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isDisable, setIsDisable] = useState(false);
     const backer = useBackerContract();
     const { web3Provider, address } = useAppSelector((state) => state.web3);
 
     const handleDeleteSubscriptionPlan = () => {
       (async () => {
         if (backer && web3Provider && address) {
+          setIsDisable(true);
           try {
             const signer = web3Provider.getSigner(address);
             await backer
@@ -56,6 +59,7 @@ const DeleteSubscriptionPlanButton = forwardRef<Props, "button">(
               duration: 5000,
             });
           }
+          setIsDisable(false);
         }
       })();
     };
@@ -82,7 +86,11 @@ const DeleteSubscriptionPlanButton = forwardRef<Props, "button">(
               <Button mr={3} onClick={onClose}>
                 Cancel
               </Button>
-              <Button onClick={handleDeleteSubscriptionPlan} colorScheme="red">
+              <Button
+                onClick={handleDeleteSubscriptionPlan}
+                isDisabled={isDisable}
+                colorScheme="red"
+              >
                 Delete
               </Button>
             </ModalFooter>

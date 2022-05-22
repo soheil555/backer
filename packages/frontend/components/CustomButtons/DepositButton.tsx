@@ -27,6 +27,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
   const toast = useToast();
   const { web3Provider, address } = useAppSelector((state) => state.web3);
   const backer = useBackerContract();
+  const [isDisable, setIsDisable] = useState(false);
 
   const [depositValue, setDepositValue] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,6 +36,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
 
   const handleDeposit = async () => {
     try {
+      setIsDisable(true);
       const signer = web3Provider!.getSigner(address);
 
       await backer!
@@ -61,6 +63,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
         duration: 5000,
       });
     }
+    setIsDisable(false);
   };
 
   return (
@@ -106,7 +109,7 @@ const DepositButton = forwardRef<ButtonProps, "button">((props, ref) => {
             </Button>
             <Button
               onClick={handleDeposit}
-              isDisabled={depositValue.length === 0}
+              isDisabled={depositValue.length === 0 || isDisable}
               colorScheme="purple"
             >
               Deposit

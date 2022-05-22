@@ -24,17 +24,21 @@ import { parseBalance } from "../../../utils";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import useSubscribers from "../../../hooks/useSubscribers";
 import Subscriber from "../../../components/User/Creator/Subscriber";
+import { useState } from "react";
 
 const Subscribers: Page = () => {
   const toast = useToast();
   const backer = useBackerContract();
   const { web3Provider, address } = useAppSelector((state) => state.web3);
   const { data: creatorPayment } = useCreatorPayment(address);
+  const [isDisable, setIsDisable] = useState(false);
   const { data: subscribers } = useSubscribers(address);
 
   const handleRemoveExpiredSubscribers = () => {
     if (backer && web3Provider && address) {
       (async () => {
+        setIsDisable(true);
+
         try {
           await backer.removeExpiredSubscribers(address);
           toast({
@@ -55,12 +59,15 @@ const Subscribers: Page = () => {
             duration: 5000,
           });
         }
+        setIsDisable(false);
       })();
     }
   };
 
   const handleClaim = async () => {
     if (backer && web3Provider && address) {
+      setIsDisable(true);
+
       try {
         const signer = web3Provider.getSigner(address);
         await backer.connect(signer).claimCreatorPayment();
@@ -84,6 +91,7 @@ const Subscribers: Page = () => {
           duration: 5000,
         });
       }
+      setIsDisable(false);
     }
   };
 
@@ -115,6 +123,7 @@ const Subscribers: Page = () => {
               onClick={handleRemoveExpiredSubscribers}
               colorScheme="purple"
               variant="outline"
+              isDisabled={isDisable}
             >
               Remove expired subscribers
             </Button>
@@ -142,7 +151,9 @@ const Subscribers: Page = () => {
                 onClick={handleClaim}
                 colorScheme="purple"
                 variant="outline"
-                isDisabled={!creatorPayment || creatorPayment.isZero()}
+                isDisabled={
+                  !creatorPayment || creatorPayment.isZero() || isDisable
+                }
               >
                 Claim
               </Button>

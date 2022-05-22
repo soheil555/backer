@@ -23,6 +23,7 @@ interface Props {
 
 export default function SendTip({ address }: Props) {
   const toast = useToast();
+  const [isDisable, setIsDisable] = useState(false);
   const { web3Provider, address: userAddress } = useAppSelector(
     (state) => state.web3
   );
@@ -31,31 +32,35 @@ export default function SendTip({ address }: Props) {
   const backer = useBackerContract();
 
   const handleSendTip = async () => {
-    try {
-      const signer = web3Provider!.getSigner(userAddress);
+    if (backer && web3Provider && userAddress) {
+      setIsDisable(true);
+      try {
+        const signer = web3Provider.getSigner(userAddress);
 
-      await backer!
-        .connect(signer)
-        .sendTip(address, ethers.utils.parseEther(String(value)));
+        await backer
+          .connect(signer)
+          .sendTip(address, ethers.utils.parseEther(String(value)));
 
-      toast({
-        title: "Send Tip",
-        description: "Tip sent successfully",
-        status: "success",
-        isClosable: true,
-        duration: 5000,
-      });
+        toast({
+          title: "Send Tip",
+          description: "Tip sent successfully",
+          status: "success",
+          isClosable: true,
+          duration: 5000,
+        });
 
-      setValue(0);
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Send Tip",
-        description: "Failed to send tip",
-        status: "error",
-        isClosable: true,
-        duration: 5000,
-      });
+        setValue(0);
+      } catch (error) {
+        console.error(error);
+        toast({
+          title: "Send Tip",
+          description: "Failed to send tip",
+          status: "error",
+          isClosable: true,
+          duration: 5000,
+        });
+      }
+      setIsDisable(false);
     }
   };
 
@@ -100,7 +105,7 @@ export default function SendTip({ address }: Props) {
       </Box>
       <Button
         onClick={handleSendTip}
-        isDisabled={value == 0}
+        isDisabled={value == 0 || isDisable}
         colorScheme="purple"
         variant="outline"
         mt={4}

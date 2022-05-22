@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import useAppSelector from "../../hooks/useAppSelector";
 import useBackerContract from "../../hooks/useBackerContract";
+import { useState } from "react";
 
 type Props = {
   creator: string;
@@ -24,12 +25,14 @@ type Props = {
 const UnsubscribeButton = forwardRef<Props, "button">(
   ({ creator, ...restProps }, ref) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isDisable, setIsDisable] = useState(false);
     const { web3Provider, address } = useAppSelector((state) => state.web3);
     const backer = useBackerContract();
     const toast = useToast();
 
     const handleUnsubscribe = async () => {
       if (web3Provider && backer && address) {
+        setIsDisable(true);
         try {
           const signer = web3Provider.getSigner(address);
           await backer.connect(signer).cancelSubscribe(creator);
@@ -53,6 +56,7 @@ const UnsubscribeButton = forwardRef<Props, "button">(
             duration: 5000,
           });
         }
+        setIsDisable(false);
       }
     };
 
@@ -78,7 +82,11 @@ const UnsubscribeButton = forwardRef<Props, "button">(
               <Button mr={3} onClick={onClose}>
                 Cancel
               </Button>
-              <Button onClick={handleUnsubscribe} colorScheme="red">
+              <Button
+                isDisabled={isDisable}
+                onClick={handleUnsubscribe}
+                colorScheme="red"
+              >
                 Unsubscribe
               </Button>
             </ModalFooter>
