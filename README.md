@@ -25,7 +25,7 @@ A Supporter:
 - Subscribe to the creators' subscription plans and support the creators with regular payments
 - Can cancel the subscription and get the remaining funds back
 - Can send tips to creators
-- she Can view the list of creators she/he subscribes to
+- Can view the list of creators she/he subscribes to
 
 A Creator:
 
