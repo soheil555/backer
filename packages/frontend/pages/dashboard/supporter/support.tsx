@@ -65,16 +65,16 @@ const Support: Page = () => {
         <Box>
           <FormControl mb={3} w="450px" isInvalid={error.length !== 0}>
             <FormLabel htmlFor="email">
-              The Creator UNS Domain/Ethereum address
+              The Creator UNS Domain/Polygon address
             </FormLabel>
             <Input
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="UNS Domain name/Ethereum address"
+              placeholder="UNS Domain name/Polygon address"
             />
             {error.length === 0 ? (
               <FormHelperText>
-                Please either enter the creator UNS domain name or Ethereum
+                Please either enter the creator UNS domain name or Polygon
                 address.
               </FormHelperText>
             ) : (
