@@ -69,10 +69,10 @@ const Web3Button = forwardRef<Web3ButtonProps, "button">(
         if (chainId != network.chainId) {
           toast({
             title: "Wrong ChainId",
-            description: `Please connect to the network with chainId ${chainId}`,
+            description: `Please Switch the Metamask's network to the Mumbai network(chainId: ${chainId}) and then try to connect.`,
             status: "error",
             isClosable: true,
-            duration: 5000,
+            duration: 10000,
           });
           return;
         }
