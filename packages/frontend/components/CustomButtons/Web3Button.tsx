@@ -67,14 +67,48 @@ const Web3Button = forwardRef<Web3ButtonProps, "button">(
         const network = await web3Provider.getNetwork();
 
         if (chainId != network.chainId) {
-          toast({
-            title: "Wrong ChainId",
-            description: `Please Switch the Metamask's network to the Mumbai network(chainId: ${chainId}) and then try to connect.`,
-            status: "error",
-            isClosable: true,
-            duration: 10000,
-          });
-          return;
+          try {
+            await window.ethereum.request({
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: "0x13881" }],
+            });
+          } catch (error: any) {
+            // This error code indicates that the chain has not been added to MetaMask
+            if (error.code === 4902) {
+              try {
+                await window.ethereum.request({
+                  method: "wallet_addEthereumChain",
+                  params: [
+                    {
+                      chainName: "Mumbai",
+                      chainId: "0x13881",
+                      nativeCurrency: {
+                        name: "MATIC",
+                        decimals: 18,
+                        symbol: "MATIC",
+                      },
+                      rpcUrls: ["https://matic-mumbai.chainstacklabs.com"],
+                    },
+                  ],
+                });
+              } catch (error) {
+                console.log(error);
+
+                toast({
+                  title: "Wrong ChainId",
+                  description: `Please Switch the Metamask's network to the Polygon Testnet(Mumbai) network and then try to connect.`,
+                  status: "error",
+                  isClosable: true,
+                  duration: 10000,
+                });
+
+                return;
+              }
+            } else {
+              console.log(error);
+              return;
+            }
+          }
         }
 
         dispatch(
